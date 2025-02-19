@@ -1,0 +1,174 @@
+:root { 
+  --background-color: #ffffff; 
+  --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
+  --heading-color: #2d465e; /* Color for headings, subheadings and title throughout the website */
+  --accent-color: #116530; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
+  --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
+}
+
+#carousel_section {
+  padding: 0;
+}
+
+.hero-carousel .carousel {
+  width: 100%;
+  min-height: calc(100vh - 100px);
+  padding: 0;
+  margin: 0;
+  background-color: #060606;
+  position: relative;
+}
+
+.dark-background {
+--background-color: #060606;
+--default-color: #ffffff;
+--heading-color: #ffffff;
+--accent-color: #2ea359;
+--surface-color: #252525;
+--contrast-color: #ffffff;
+}
+
+.hero-carousel .carousel-item {
+  position: relative;
+  height: calc(100vh - 80px); 
+  inset: 0; 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.hero-carousel .carousel-item:before {
+  content: "";
+  background: color-mix(in srgb, var(--background-color), transparent 60%);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-carousel img {
+  width: 100%; 
+  height: 100%;
+  object-fit: cover; 
+  position: absolute;
+  z-index: 1; 
+}
+
+.hero-carousel .carousel-caption {
+  position: absolute;
+  inset: 90px 64px 64px 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 3;
+}
+
+.hero-carousel h2 {
+  margin-bottom: 30px;
+  font-size: 48px;
+  font-weight: 700;
+  animation: fadeInDown 1s both;
+}
+
+@media (max-width: 768px) {
+  .hero-carousel h2 {
+    font-size: 30px;
+  }
+}
+
+.hero-carousel p {
+animation: fadeInDown 1s both 0.2s;
+}
+
+@media (min-width: 1024px) {
+.hero-carousel h2,
+.hero-carousel p {
+  max-width: 60%;
+}
+}
+
+.hero-carousel .btn-get-started {
+color: var(--contrast-color);
+background: var(--accent-color);
+font-family: var(--heading-font);
+font-weight: 500;
+font-size: 15px;
+letter-spacing: 1px;
+display: inline-block;
+padding: 8px 32px;
+border-radius: 50px;
+transition: 0.5s;
+margin: 10px;
+animation: fadeInUp 1s both 0.4s;
+}
+
+.hero-carousel .btn-get-started:hover {
+background: color-mix(in srgb, var(--accent-color), transparent 20%);
+}
+
+.hero-carousel .carousel-control-prev,
+.hero-carousel .carousel-control-next {
+width: 10%;
+transition: 0.3s;
+opacity: 0.5;
+z-index: 10; /* Đảm bảo các nút điều khiển nằm trên các thành phần khác */
+}
+
+.hero-carousel .carousel-control-prev:focus,
+.hero-carousel .carousel-control-next:focus {
+opacity: 0.5;
+}
+
+.hero-carousel .carousel-control-prev:hover,
+.hero-carousel .carousel-control-next:hover {
+opacity: 0.9;
+}
+
+@media (min-width: 1024px) {
+.hero-carousel .carousel-control-prev,
+.hero-carousel .carousel-control-next {
+  width: 5%;
+}
+}
+
+.hero-carousel .carousel-control-next-icon,
+.hero-carousel .carousel-control-prev-icon {
+background: none;
+font-size: 32px;
+line-height: 1;
+z-index: 10; /* Đảm bảo các biểu tượng điều khiển nằm trên các thành phần khác */
+}
+
+.hero-carousel .carousel-indicators {
+list-style: none;
+}
+
+.hero-carousel .carousel-indicators li {
+cursor: pointer;
+}
+
+@keyframes fadeInUp {
+from {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+}
+
+to {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+}
+
+@keyframes fadeInDown {
+from {
+  opacity: 0;
+  transform: translate3d(0, -100%, 0);
+}
+
+to {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+}
