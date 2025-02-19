@@ -5,7 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "../../scss/style.scss"
 
 
-        // Xóa style.scss của Admin nếu có
 export default function MainAdminLayout() {
     return (
         <div>
