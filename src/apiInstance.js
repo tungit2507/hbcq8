@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axioInstance = axios.create({
-  baseURL: 'https://clbbcq8.com/api/v1',
+  baseURL: 'http://localhost:8080/api/v1',
   withCredentials: true,
 });
 
