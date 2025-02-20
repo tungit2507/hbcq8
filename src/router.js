@@ -84,7 +84,6 @@ const routes = createBrowserRouter([
     {
         element: <PrivateRoute><MainAdminLayout/></PrivateRoute>,
         children: [
-            { path: "/admin", element: <HomePage/>},
             { path: "/admin/management/user/list", element: <UserManagementList/>},
             { path: "/admin/management/user/update", element: <UserManagementUpdate/>, name: "Update User" },
             { path: "/admin/management/user/add", element: <UserManagementAdd/>, name: "Update User" },

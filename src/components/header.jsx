@@ -67,6 +67,13 @@ const Header = () => {
               <NavDropdown title={isLoggedIn === "true" ? `Xin chào, ${currentUser ? currentUser.username : ''}` : 'Tài Khoản'} id="basic-nav-dropdown custom-dropdown-menu" align="start">
                 {isLoggedIn === "true" ? 
                   <>
+                    {
+                        currentUser.roleId === 1 && (
+                          <NavDropdown.Item as={Link} to={"/admin/management/user/list"} className="dropdown-item nav-link">Quản Trị Trang Web</NavDropdown.Item>
+                        )
+                        
+                    }
+
                     <NavDropdown.Item as={Link} to={"/birds"} className="dropdown-item nav-link">Quản Lý Chim Đua</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to={"/facibilitys"} className="dropdown-item nav-link">Quản Lý Căn Cứ</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to={"/profile"} className="dropdown-item nav-link">QL Tài Khoản</NavDropdown.Item>
