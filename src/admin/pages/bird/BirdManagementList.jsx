@@ -46,7 +46,7 @@ const BirdManagement = () => {
       fetchData();
       setShowAddModal(false);
     } catch (error) {
-      const errorMessage = error.response.data.errorMessage;
+      const errorMessage = error?.response?.data?.errorMessage;
       showErrorNotification(errorMessage || "Lỗi trong quá trình xử lý ");
     }
   };
@@ -72,7 +72,7 @@ const BirdManagement = () => {
       fetchData();
       setShowEditModal(false);
     } catch (error) {
-      const errorMessage = error.response.data.errorMessage;
+      const errorMessage = error?.response?.data?.errorMessage;
       showErrorNotification(errorMessage || "Lỗi trong quá trình cập nhật");
     }
   };
@@ -83,7 +83,7 @@ const BirdManagement = () => {
       fetchData();
       Swal.fire('Thành công', 'Chim đã được xóa thành công.', 'success');
     } catch (error) {
-      const errorMessage = error.response.data.errorMessage;
+      const errorMessage = error?.response?.data?.errorMessage;
       showErrorNotification(errorMessage || "Không thể xóa chim. Vui lòng thử lại sau.");
     }
   };

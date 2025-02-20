@@ -57,13 +57,13 @@ body {
 
 a {
   color: var(--accent-color);
-  text-decoration: none;
+  text-decoration: none !important;
   transition: 0.3s;
 }
 
 a:hover {
   color: color-mix(in srgb, var(--accent-color), transparent 25%);
-  text-decoration: none;
+  text-decoration: none ;
 }
 
 h1,
@@ -166,9 +166,11 @@ h6 {
 .header {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 0;
+  padding: 0 ;
   transition: all 0.5s;
   z-index: 997;
+  display: block !important;
+  padding: 0 !important;
 }
 
 .header .logo {
@@ -392,10 +394,12 @@ h6 {
 # Global Footer
 --------------------------------------------------------------*/
 .footer {
-  color: var(--default-color);
+  color: var(--default-color) !important;
   background-color: var(--background-color);
   font-size: 14px;
   position: relative;
+  display: block !important;
+  padding: 0 !important;
 }
 
 .footer .footer-top {
@@ -414,7 +418,7 @@ h6 {
 }
 
 .footer .footer-about .logo span {
-  color: var(--heading-color);
+  color: var(--heading-color) !important;
   font-family: var(--heading-font);
   font-size: 26px;
   font-weight: 700;

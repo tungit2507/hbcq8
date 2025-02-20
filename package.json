@@ -70,7 +70,6 @@
     "css-loader": "^7.1.2",
     "postcss-loader": "^8.1.1",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.85.0",
     "webpack-dev-server": "^5.2.0"
   }
 }

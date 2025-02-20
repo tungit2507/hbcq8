@@ -48,7 +48,7 @@ const FacilityManagementAdmin = () => {
             fetchData();
             setShowAddModal(false);
         } catch (error) {
-            const errorMessage = error.response.data.errorMessage;
+            const errorMessage = error?.response?.data?.errorMessage;
             showErrorNotification(errorMessage || "Lỗi trong quá trình xử lý ");
         }
     };
@@ -81,7 +81,7 @@ const FacilityManagementAdmin = () => {
             fetchData();
             setShowEditModal(false);
         } catch (error) {
-            const errorMessage = error.response.data.errorMessage;
+            const errorMessage = error?.response?.data?.errorMessage;
             showErrorNotification(errorMessage || "Lỗi trong quá trình cập nhật ");
         }
     };
@@ -92,7 +92,7 @@ const FacilityManagementAdmin = () => {
             fetchData();
             Swal.fire('Thành công', 'Căn cứ đã được xóa thành công.', 'success');
         } catch (error) {
-            const errorMessage = error.response.data.errorMessage;
+            const errorMessage = error?.response?.data?.errorMessage;
             showErrorNotification(errorMessage || "Không thể xóa cơ sở. Vui lòng thử lại sau.");
         }
     };

@@ -68,7 +68,7 @@ const FacilityManagement = () => {
         })
         .catch(error => {
             console.error(error);
-            const errorMessage = error.response.data.errorMessage;
+            const errorMessage = 
             toast.error(errorMessage);
         });
     };
@@ -108,7 +108,7 @@ const FacilityManagement = () => {
         })
         .catch(error => {
             console.error(error);
-            const errorMessage = error.response.data.errorMessage;
+            const errorMessage = error?.response?.data?.errorMessage;
             toast.error(errorMessage);
         });
     };
@@ -122,7 +122,7 @@ const FacilityManagement = () => {
         })
         .catch(error => {
             console.error(error);
-            const errorMessage = error.response.data.errorMessage;
+            const errorMessage = error?.response?.data?.errorMessage;
             toast.error(errorMessage);
         });
     };

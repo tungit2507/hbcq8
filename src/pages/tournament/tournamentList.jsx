@@ -137,7 +137,7 @@ const TournamentList = () => {
     })
     .catch(error => {
       console.log(error);
-      const errorMessage = error.response.data.errorMessage;
+      const errorMessage = error?.response?.data?.errorMessage;
       const errorCode = error.response.data.errorCode;
       console.error('Lỗi khi đăng ký giải đấu:', errorMessage, 'Mã lỗi:', errorCode);
       toast.error(`${errorMessage}`);

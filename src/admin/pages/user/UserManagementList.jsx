@@ -80,7 +80,7 @@ const UserManagementList = () => {
         setUsers(updatedUsers);
         setFilteredUsers(updatedUsers);
       } catch (error) {
-        const errorMessage = error.response.data.errorMessage;
+        const errorMessage = error?.response?.data?.errorMessage;
         showErrorNotification(errorMessage || "Lỗi! Không thể xóa người dùng.")
       }
     }
@@ -134,7 +134,7 @@ const UserManagementList = () => {
       setPassword('');
       setConfirmPassword('');
     } catch (error) {
-      const errorMessage = error.response.data.errorMessage;
+      const errorMessage = error?.response?.data?.errorMessage;
       showErrorNotification(errorMessage || "Lỗi! Không thể cập nhật mật khẩu.");
     }
   };

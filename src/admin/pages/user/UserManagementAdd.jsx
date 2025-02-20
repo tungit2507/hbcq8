@@ -25,7 +25,7 @@ const UserManagementAdd = () => {
       showSuccessNotification("Thêm thành công thành viên");
       navigate('/admin/management/user/list');
     } catch (error) {
-      const errorMessage = error.response.data.errorMessage;
+      const errorMessage = error?.response?.data?.errorMessage;
       showErrorNotification(errorMessage || "Lỗi! Không thể thêm người dùng.")
     }
   };

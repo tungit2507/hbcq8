@@ -25,9 +25,6 @@ import TournamentStageResults from "./pages/tournament/TournamentStageResult";
 import PrivateRoute from "./admin/auth/PrivateRouter";
 import MainAdminLayout from "./admin/layout/main_layout/main_layout";
 import UserManagementList from "./admin/pages/user/UserManagementList";
-import LoginAdminForm from "./admin/pages/auth/LoginForm"
-
-
 
 import RaceManagementUpdate from "./admin/pages/race/RacemanagementUpdate";
 import RaceManagementList from "./admin/pages/race/RaceManagementList";
@@ -80,7 +77,6 @@ const routes = createBrowserRouter([
             { path: "/change-password", element: <ChangePassword/> },
         ]
     },
-    { path: "/admin/login", element: <LoginAdminForm/>},
     {
         element: <PrivateRoute><MainAdminLayout/></PrivateRoute>,
         children: [
