@@ -68,7 +68,7 @@ const Header = () => {
                 {isLoggedIn === "true" ? 
                   <>
                     {
-                        currentUser.roleId === 1 && (
+                        currentUser?.roleId === 1 && (
                           <NavDropdown.Item as={Link} to={"/admin/management/user/list"} className="dropdown-item nav-link">Quản Trị Trang Web</NavDropdown.Item>
                         )
                         

@@ -49,12 +49,13 @@ import AdminTournamentStageResults from "./admin/pages/race/RaceStageResult";
 import ArticleUpdate from "./admin/pages/article/ArticleUpdate";
 import Info from "./admin/pages/info/Info";
 import AboutUsInfoManagement from "./admin/pages/info/AboutUsInfoManagement";
+import AuthRouter from "./admin/auth/AuthRouter";
 
 const routes = createBrowserRouter([
     
-    { path: "/login", element: <LoginForm/>},
-    { path: "/register", element: <RegistrationForm/> },
-    { path: "/forgot-password", element: <ForgotPassword/> },
+    { path: "/login", element: <AuthRouter><LoginForm/></AuthRouter>},
+    { path: "/register", element: <AuthRouter><RegistrationForm/></AuthRouter> },
+    { path: "/forgot-password", element: <AuthRouter><ForgotPassword/></AuthRouter> },
     { path: "/change-password", element: <ChangePassword/> },
     {
         element: <MainLayout />,
