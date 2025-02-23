@@ -1,3 +1,5 @@
+
+import ChatBotAI from "../util/ChatBotAI";
 const Page404 =  () =>{
     return <div className="d-flex justify-content-center align-items-center vh-100">
         <div className="text-center">
@@ -8,6 +10,7 @@ const Page404 =  () =>{
                 for does not exist.
             </p>
         </div>
+        <ChatBotAI/>
     </div>
 }
 
