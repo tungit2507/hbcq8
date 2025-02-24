@@ -106,7 +106,7 @@ const BirdManagement = () => {
 
   return (
     <div className="p-3 rounded">
-      <h4>Quản Lý Chim Đua</h4>
+      <h4>Quản Lý Chiến Binh</h4>
       <CButton color="primary" onClick={() => setShowAddModal(true)}>Thêm Chim Đua</CButton>
       <div className="table-responsive mt-4">
         <CTable className="table-bordered rounded table-striped text-center">
@@ -138,7 +138,7 @@ const BirdManagement = () => {
       {/* Modal Thêm Chim Đua */}
       <CModal visible={showAddModal} onClose={() => setShowAddModal(false)}>
         <CModalHeader closeButton>
-          <CModalTitle>Thêm Chim Đua</CModalTitle>
+          <CModalTitle>Thêm Chiến Binh</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CForm>
@@ -167,7 +167,7 @@ const BirdManagement = () => {
       {/* Modal Chỉnh Sửa Chim Đua */}
       <CModal visible={showEditModal} onClose={() => setShowEditModal(false)}>
         <CModalHeader closeButton>
-          <CModalTitle>Chỉnh Sửa Chim Đua</CModalTitle>
+          <CModalTitle>Chỉnh Sửa Chiến Binh</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CForm>
