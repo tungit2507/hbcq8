@@ -4,6 +4,7 @@ import { showErrorNotification } from "./sweetAlertNotify";
 
 const BASE_URL_USERS = '/admin/user';
 const BASE_URL_LOGIN = '/admin/login';
+const BASE_URL_LOGOUT = '/logout';
 
 export const getListUser = async () => {
     try {

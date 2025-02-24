@@ -248,7 +248,7 @@ const UpdateRaceForm = () => {
                     <CFormInput
                       type="number"
                       step={0.1}
-                      readOnly
+                      // readOnly
                       id={`tourStages[${index}].restTimePerDay`}
                       {...register(`tourStages[${index}].restTimePerDay`, { required: 'Thời gian nghỉ là bắt buộc' })}
                       invalid={!!errors.tourStages?.[index]?.restTimePerDay}
@@ -263,8 +263,9 @@ const UpdateRaceForm = () => {
               <CRow className="mb-3">
                 <CCol>
                   {fields.length < 10 && (
-                    <CButton className='my-2' type="button" color="secondary" onClick={() => append({ startPointCode: '', startPointName: '', startPointCoor: '', startTime: '' })}>
-                      Thêm Chặng
+                    <CButton className='my-2' type="button" color="secondary"
+                    //  onClick={() => append({ startPointCode: '', startPointName: '', startPointCoor: '', startTime: '' })}>
+                     > Thêm Chặng
                     </CButton>
                   )}
                 </CCol>
