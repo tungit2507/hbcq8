@@ -16,8 +16,8 @@ const Header = () => {
     });
   }, []);
 
-  const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
-  let isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  let isLoggedIn = localStorage.getItem("isLoggedIn");
 
   const handleNavLinkClick = () => {
     const navMenu = document.getElementById('navmenu');

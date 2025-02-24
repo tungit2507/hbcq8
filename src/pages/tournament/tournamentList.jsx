@@ -101,7 +101,7 @@ const TournamentList = () => {
   };
 
   const handleRegister = () => {
-    const currentUser = sessionStorage.getItem('userId');
+    const currentUser = localStorage.getItem('userId');
     const currentTime = new Date().toISOString();
     const selectedTournament = tournamentsData.find(tournament => tournament.tourId === selectedTournamentId);
     
@@ -200,7 +200,7 @@ const TournamentList = () => {
                     <CButton className='me-2'
                       hidden={tournament.isActivedForRegister === false}
                       color="primary" onClick={() => {
-                        const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+                        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
                         if (isLoggedIn) {
                           handleOpenPopup(tournament.tourId);
                         } else {

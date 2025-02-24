@@ -31,7 +31,7 @@ const Header = () => {
 
 
 
-  const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const headerRef = useRef()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 

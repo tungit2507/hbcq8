@@ -19,10 +19,10 @@ const ForgotPassword = () => {
     try {
       const response = await axioInstance.post('/login', data,{ withCredentials: true});
       const user = response.data;
-      sessionStorage.setItem("currentUser", JSON.stringify(user));
-      sessionStorage.setItem("isLoggedIn", "true");
-      sessionStorage.setItem("token", user.token);
-      sessionStorage.setItem("userId", user.id);
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("userId", user.id);
       toast.success("Đăng Nhập Thành Công");
       setTimeout( navigate('/'), 1000);
     } catch (error) {

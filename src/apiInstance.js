@@ -9,6 +9,8 @@ axioInstance.interceptors.response.use(
   response => response,
   error => {
     if (error.response?.data?.status === 401) {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('currentUser');
       window.location.href = '/login';
     }
     return Promise.reject(error);

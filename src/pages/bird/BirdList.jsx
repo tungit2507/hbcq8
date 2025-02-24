@@ -44,7 +44,7 @@ const BirdList = () => {
     //         return;
     //     }
 
-    //     const currentUser = await JSON.parse(sessionStorage.getItem("currentUser"));
+    //     const currentUser = await JSON.parse(localStorage.getItem("currentUser"));
     //     const formData = new FormData();
     //     formData.append('name', currentBird.name);
     //     formData.append('code', currentBird.code);
@@ -79,7 +79,7 @@ const BirdList = () => {
             return;
         }
 
-        const currentUser = await JSON.parse(sessionStorage.getItem("currentUser"));
+        const currentUser = await JSON.parse(localStorage.getItem("currentUser"));
         const formData = new FormData();
         formData.append('name', currentBird.name);
         formData.append('imgUrl', currentBird.image);

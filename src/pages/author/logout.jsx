@@ -11,8 +11,8 @@ const Logout = () => {
     if (isLoggingOut) return; // Ngăn chặn spam logout
     setIsLoggingOut(true);
     try {
-      const token = sessionStorage.getItem('token');
-      const userId = sessionStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
       await axioInstance.get('/logout', {
         // withCredentials: true,
         headers: {
@@ -27,8 +27,8 @@ const Logout = () => {
       toast.error('Logout failed:', error);
     } finally {
       setIsLoggingOut(false);
-      sessionStorage.setItem("isLoggedIn", false);
-      sessionStorage.removeItem("currentUser");
+      localStorage.setItem("isLoggedIn", false);
+      localStorage.removeItem("currentUser");
       navigate("/login")
     
     }

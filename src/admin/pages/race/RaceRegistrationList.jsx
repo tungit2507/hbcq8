@@ -58,7 +58,7 @@ const RaceRegistrationList = () => {
   //   }).then(async (result) => {
   //     if (result.isConfirmed) {
   //       const formData = new FormData();
-  //       const currentUser = JSON.parse(sessionStorage.getItem("currentUser"))
+  //       const currentUser = JSON.parse(localStorage.getItem("currentUser"))
   //       formData.append('tourId', raceId);
   //       formData.append('requesterId', requesterId);
   //       formData.append('approverId', currentUser.id); 
@@ -96,7 +96,7 @@ const RaceRegistrationList = () => {
         }).then( async (reasonResult) => {
           if (reasonResult.isConfirmed) {
             const formData = new FormData();
-            const currentUser = JSON.parse(sessionStorage.getItem("currentUser"))
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"))
             formData.append('tourId', raceId);
             formData.append('requesterId', requesterId);
             formData.append('approverId', currentUser.id); 
@@ -122,7 +122,7 @@ const RaceRegistrationList = () => {
       cancelButtonText: 'Hủy',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         const approvedRegistrations = registrations.filter(registration => 
           selectedRegistrations.includes(registration.requesterId)
         );

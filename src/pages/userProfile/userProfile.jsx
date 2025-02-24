@@ -24,7 +24,7 @@ const Profile = () => {
       const response = await axioInstance.put('/user/update', userUpdateRequestDto)
       if (response.data) {
         toast.success('Cập nhật thông tin thành công');
-        sessionStorage.setItem('currentUser', JSON.stringify(response.data));
+        localStorage.setItem('currentUser', JSON.stringify(response.data));
         setUser(response.data);
       }
     } catch (error) {

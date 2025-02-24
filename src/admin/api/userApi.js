@@ -81,8 +81,8 @@ export const login = async (loginData) => {
 };
 
 export const logout = async () => {
-    sessionStorage.removeItem('currentUser');
-    sessionStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('isLoggedIn');
     try {
         const response = await axiosInstance.get(`${BASE_URL_LOGOUT}`);
         return response.data;

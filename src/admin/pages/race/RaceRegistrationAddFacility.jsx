@@ -75,7 +75,7 @@ const RaceRegistrationAddFacility = () => {
         };
       });
       
-      const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
       const formData = {
         tourId: raceId,

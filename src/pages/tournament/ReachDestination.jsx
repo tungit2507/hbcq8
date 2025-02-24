@@ -40,7 +40,7 @@ const ReachDestination = () => {
             cancelButtonText: 'Hủy'
         }).then((result) => {
             if (result.isConfirmed) {
-                const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
                 const formData = {
                     tourId: tourId,
                     requesterId: currentUser.id,

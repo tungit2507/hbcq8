@@ -31,7 +31,7 @@ const ChangePassword = () => {
     setIsSubmitting(true);
 
     try {
-      let currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
       // create form data
       const formData = new FormData();
       formData.append('currentPass', data.currentPassword);
@@ -47,8 +47,8 @@ const ChangePassword = () => {
       toast.success("Đổi mật khẩu thành công");
       
       // remove session storage
-      sessionStorage.setItem("isLoggedIn", "false");
-      sessionStorage.removeItem("currentUser");
+      localStorage.setItem("isLoggedIn", "false");
+      localStorage.removeItem("currentUser");
       
       // navigate to login page
       setTimeout(() => {
