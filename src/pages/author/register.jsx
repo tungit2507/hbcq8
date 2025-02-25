@@ -53,7 +53,16 @@ const RegistrationForm = () => {
                   <div className="mb-3">
                     <input
                       type="text"
-                      {...register('username', { required: 'Tên người dùng là bắt buộc' })}
+                      {...register('username', { required: 'Tên người dùng là bắt buộc', 
+                        minLength: {
+                          value: 6,
+                          message: 'tên tài khoản phải có ít nhất 6 ký tự'
+                        },
+                        maxLength: {
+                          value: 20,
+                          message: 'tên tài khoản không thể vuợt quá 20 ký tự'
+                        },
+                       })}
                       className="form-control"
                       placeholder="Tên người dùng"
                     />
@@ -105,7 +114,10 @@ const RegistrationForm = () => {
                       type="password"
                       {...register('password', { 
                         required: 'Mật khẩu là bắt buộc', 
-                        minLength: { value: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự' } 
+                        minLength: { value: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự', minLength: {
+                          value: 5,
+                          message: 'Mật khẩu phải có ít nhất 6 ký tự'
+                        } } 
                       })}
                       className="form-control"
                       placeholder="Mật khẩu"
