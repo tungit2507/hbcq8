@@ -61,9 +61,12 @@ const UpdateRaceForm = () => {
       const formattedStartDateReceive = formatDate(data.startDateReceive);
       const formattedEndDateReceive = formatDate(data.endDateReceive);
 
+      // Tìm orderNo lớn nhất hiện có trong các stage
+      const maxOrderNo = data.tourStages.reduce((max, stage) => Math.max(max, stage.orderNo || 0), 0);
+      let nextOrderNo = maxOrderNo + 1;
+
       // Tạo một Map để lưu trữ mã điểm xuất phát và orderNo tương ứng
       const orderNoMap = new Map();
-      let nextOrderNo = 1;
 
       // Format dữ liệu cho từng chặng đua
       const formattedTourStages = data.tourStages.map((stage) => {
@@ -72,7 +75,7 @@ const UpdateRaceForm = () => {
 
         // Nếu mã điểm xuất phát chưa có trong Map, gán một orderNo mới
         if (!orderNo) {
-          orderNo = nextOrderNo++;
+          orderNo = nextOrderNo;
           orderNoMap.set(stage.startPointCode, orderNo);
         }
 
@@ -300,7 +303,7 @@ const UpdateRaceForm = () => {
                       className='my-2'
                       type="button"
                       color="secondary"
-                      onClick={() => append({ startPointCode: '', startPointName: '', startPointCoor: '', startTime: '' })}
+                      onClick={() => append({ startPointCode: '', startPointName: '', startPointCoor: '', startTime: '', restTimePerDay: '12.0' })}
                       disabled={fields.length >= 10}
                     >
                       Thêm Chặng
