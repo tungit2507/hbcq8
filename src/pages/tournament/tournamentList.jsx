@@ -31,7 +31,7 @@ const TournamentList = () => {
 
   const fetchTournaments = async () => {
     try {
-      const response = await axioInstance.get('/tour-temp/list', {
+      const response = await axioInstance.get('/temp-tour/list', {
         withCredentials : true
       });
       console.log(response);
@@ -52,24 +52,23 @@ const TournamentList = () => {
 
 
   useEffect(() => {
-    
-  
     fetchTournaments();
-    
     const fetchUserBirds = async () => {
-      try {
-        const response = await axioInstance.get('/bird/me', {
-          withCredentials: true
-        });
-        if (response.data && Array.isArray(response.data)) {
-          setUserBirds(response.data);
-        } else {
-          console.error('Dữ liệu chim không hợp lệ:', response.data);
-          toast.error('Đã xảy ra lỗi khi tải danh sách chim. Dữ liệu không hợp lệ.');
+      if(currentUser !== null){
+        try {
+          const response = await axioInstance.get('/bird/me', {
+            withCredentials: true
+          });
+          if (response.data && Array.isArray(response.data)) {
+            setUserBirds(response.data);
+          } else {
+            console.error('Dữ liệu chim không hợp lệ:', response.data);
+            toast.error('Đã xảy ra lỗi khi tải danh sách chim. Dữ liệu không hợp lệ.');
+          }
+        } catch (error) {
+          console.error('Lỗi khi tải danh sách chim:', error);
+          toast.error('Đã xảy ra lỗi khi tải danh sách chim. Vui lòng thử lại sau.');
         }
-      } catch (error) {
-        console.error('Lỗi khi tải danh sách chim:', error);
-        toast.error('Đã xảy ra lỗi khi tải danh sách chim. Vui lòng thử lại sau.');
       }
     };
     fetchUserBirds();
