@@ -18,7 +18,7 @@ const TournamentStageResults = () => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const response = await axioInstance.get(`/tour/view-rank?tourId=${tourId}&&stageId=${stageId}`);
+                const response = await axioInstance.get(`/temp-tour/view-rank?tourId=${tourId}&&stageId=${stageId}`);
                 setResults(response.data);
             } catch (error) {
                 console.error('Error fetching tournament results:', error);

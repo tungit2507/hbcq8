@@ -245,14 +245,20 @@ const TournamentList = () => {
                             }
                           }
                         });
-                      }} className='m-2'>Hủy Đơn</CButton>
+                      }} className='m-1'>Hủy Đơn</CButton>
                   )}
                   {tournament.isFinished === true && (
-                    <CButton
+                    <CButton className='m-11'
                       color="warning" onClick={() => {
                         navigate(`/tournament-result?id=${tournament.tourId}`);
-                      }}>Kết Quả</CButton>
+                      }}>KQ Giải Đua</CButton>
                   )}
+                  {tournament.isFinished === true && (
+                  <CButton className='m-1'
+                      color="primary" onClick={() => {
+                        navigate(`/tour-stage?tourId=${tournament.tourId}`);
+                      }}>KQ Chặng Đua</CButton>
+                    )}
                 </CTableDataCell>
               </CTableRow>
             ))}

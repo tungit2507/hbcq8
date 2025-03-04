@@ -1,4 +1,3 @@
-// src/components/TournamentResults.js
 import React, { useState, useEffect } from 'react';
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem } from "@coreui/react";
 import axioInstance from '../../apiInstance';
@@ -6,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 const TournamentResults = () => {
     const [results, setResults] = useState([]);
-    const [tour, setTour] = useState([]);
+    const [tourName, setTourName] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
     const resultsPerPage = 10;
@@ -18,7 +17,7 @@ const TournamentResults = () => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const response = await axioInstance.get(`/tour/view-rank-of-tour?tourId=${tourId}`);
+                const response = await axioInstance.get(`/temp-tour/view-rank-of-tour?tourId=${tourId}`);
                 setResults(response.data);
             } catch (error) {
                 console.error('Error fetching tournament results:', error);
@@ -27,17 +26,16 @@ const TournamentResults = () => {
 
         const fetchTourInfo = async () => {
             try {
-                const response = await axioInstance.get(`/tour/detail?tourId=${tourId}`);
-                setTour(response.data);
-                console.log(tour);
+                const response = await axioInstance.get(`/temp-tour/name?tourId=${tourId}`);
+                setTourName(response.data); // Cập nhật tourName bằng setTourName
             } catch (error) {
-                console.error('Error fetching tournament results:', error);
+                console.error('Error fetching tournament info:', error);
             }
         };
 
         fetchTourInfo();
         fetchResults();
-    }, []);
+    }, [tourId]);
 
     const indexOfLastResult = currentPage * resultsPerPage;
     const indexOfFirstResult = indexOfLastResult - resultsPerPage;
@@ -52,7 +50,7 @@ const TournamentResults = () => {
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                 <h3 className="mb-2 mb-md-0 text-center">
                     <label htmlFor="" className=''>Kết Quả Giải Đua : </label>
-                    <label htmlFor="" className='mx-2'>{tour?.tourName}</label>
+                    <label htmlFor="" className='mx-2'>{tourName}</label>
                 </h3>
             </div>
             <hr className="my-4" />
@@ -68,11 +66,10 @@ const TournamentResults = () => {
                             <CTableHeaderCell scope="col">Vĩ Độ</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Khoảng Cách</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Vận Tốc</CTableHeaderCell>
-                            {/* <CTableHeaderCell scope="col">Mã Số Bí Mật</CTableHeaderCell> */}
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                        {results.map(ranker => {
+                        {currentResults.map(ranker => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
                             return (
                                 <CTableRow key={ranker.id}>
@@ -84,13 +81,21 @@ const TournamentResults = () => {
                                     <CTableDataCell>{latitude}</CTableDataCell>
                                     <CTableDataCell>{ranker.distance.toFixed(6)}</CTableDataCell>
                                     <CTableDataCell>{ranker.speed.toFixed(6)}</CTableDataCell>
-                                    {/* <CTableDataCell>{ranker.secretCode}</CTableDataCell> */}
                                 </CTableRow>
                             );
                         })}
                     </CTableBody>
                 </CTable>
             </div>
+            <CPagination className="justify-content-center mt-4">
+                <CPaginationItem disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>Previous</CPaginationItem>
+                {[...Array(Math.ceil(results.length / resultsPerPage)).keys()].map(number => (
+                    <CPaginationItem key={number + 1} active={number + 1 === currentPage} onClick={() => handlePageChange(number + 1)}>
+                        {number + 1}
+                    </CPaginationItem>
+                ))}
+                <CPaginationItem disabled={currentPage === Math.ceil(results.length / resultsPerPage)} onClick={() => handlePageChange(currentPage + 1)}>Next</CPaginationItem>
+            </CPagination>
         </div>
     );
 };
