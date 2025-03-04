@@ -8,19 +8,12 @@ const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    if (isLoggingOut) return; // Ngăn chặn spam logout
+    if (isLoggingOut) return; 
     setIsLoggingOut(true);
     try {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
-      await axioInstance.get('/logout', {
-        // withCredentials: true,
-        headers: {
-          'token': token,
-          'userId': userId
-        }
-      });
-      
+      await axioInstance.get('/logout');      
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);

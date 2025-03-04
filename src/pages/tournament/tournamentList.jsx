@@ -13,6 +13,8 @@ const TournamentList = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const currentPage = parseInt(queryParams.get('page') || '1', 10);
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showPopup, setShowPopup] = useState(false);
@@ -29,7 +31,7 @@ const TournamentList = () => {
 
   const fetchTournaments = async () => {
     try {
-      const response = await axioInstance.get('/tour/list', {
+      const response = await axioInstance.get('/tour-temp/list', {
         withCredentials : true
       });
       console.log(response);
@@ -174,8 +176,10 @@ const TournamentList = () => {
               <CTableHeaderCell scope="col">Ngày Kết Thúc Nhận Đơn</CTableHeaderCell> */}
               <CTableHeaderCell scope="col">Ngày Bắt Đầu</CTableHeaderCell>
               <CTableHeaderCell scope="col">Ngày Kết Thúc</CTableHeaderCell>
-              
-              <CTableHeaderCell scope="col">Trạng Thái Đơn</CTableHeaderCell>
+              {(
+                currentUser !== null && 
+                <CTableHeaderCell scope="col">Trạng Thái Đơn</CTableHeaderCell>
+              )}
               <CTableHeaderCell scope="col">Mô Tả</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -187,16 +191,18 @@ const TournamentList = () => {
                 <CTableDataCell>{tournament.tourName}</CTableDataCell>
                 <CTableDataCell>{tournament.startDateInfo}</CTableDataCell>
                 <CTableDataCell>{tournament.endDateInfo}</CTableDataCell>
-                <CTableDataCell>
-                  {tournament.tourApplyStatusCode === 'R' ? 'Đã từ chối' : 
-                   tournament.tourApplyStatusCode === 'A' ? 'Đã được duyệt' : 
-                   tournament.tourApplyStatusCode === 'W' ? 'Đang chờ duyệt' : 
-                   tournament.tourApplyStatusCode}
-                </CTableDataCell>
+                {( currentUser !== null &&
+                   <CTableDataCell>
+                   {tournament.tourApplyStatusCode === 'R' ? 'Đã từ chối' : 
+                    tournament.tourApplyStatusCode === 'A' ? 'Đã được duyệt' : 
+                    tournament.tourApplyStatusCode === 'W' ? 'Đang chờ duyệt' : 
+                    tournament.tourApplyStatusCode}
+                  </CTableDataCell>
+                )}
                 <CTableDataCell>{tournament.memo}</CTableDataCell>
                 <CTableDataCell>
-                  {
-                  (
+                  {(
+                    currentUser !== null && 
                     <CButton className='me-2'
                       hidden={tournament.isActivedForRegister === false}
                       color="primary" onClick={() => {
@@ -208,9 +214,10 @@ const TournamentList = () => {
                         }
                       }}>Đăng Ký</CButton>
                   )}
-                  {tournament.tourApplyStatusCode === 'W' && (
+                  {tournament.tourApplyStatusCode === 'W' && currentUser !== null && (
                     <CButton
-                      color="danger" onClick={() => {
+                      color="danger" onClick={() => 
+                        {
                         Swal.fire({
                           title: 'Bạn có chắc chắn muốn hủy đơn?',
                           icon: 'warning',
@@ -239,7 +246,7 @@ const TournamentList = () => {
                             }
                           }
                         });
-                      }}>Hủy Đơn</CButton>
+                      }} className='m-2'>Hủy Đơn</CButton>
                   )}
                   {tournament.isFinished === true && (
                     <CButton
