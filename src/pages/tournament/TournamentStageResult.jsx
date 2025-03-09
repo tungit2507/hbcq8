@@ -27,7 +27,7 @@ const TournamentStageResults = () => {
 
         const getStageStatus = async () => {
             try {
-                const response = await axioInstance.get(`/tour-stage/status?stageId=${stageId}`);
+                const response = await axioInstance.get(`/temp-tour-stage/status?stageId=${stageId}`);
                 setIsFinished(response.data);
             } catch (error) {
                 console.error('Error fetching tournament stage:', error);
