@@ -1,4 +1,3 @@
-// src/components/TournamentStageResults.js
 import React, { useState, useEffect } from 'react';
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem } from "@coreui/react";
 import axioInstance from '../../apiInstance';
@@ -8,6 +7,7 @@ const TournamentStageResults = () => {
     const [results, setResults] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isFinished, setIsFinished] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const resultsPerPage = 10;
 
     const location = useLocation();
@@ -36,7 +36,14 @@ const TournamentStageResults = () => {
 
         getStageStatus();
         fetchResults();
-    }, []);
+
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [tourId, stageId]);
 
     const indexOfLastResult = currentPage * resultsPerPage;
     const indexOfFirstResult = indexOfLastResult - resultsPerPage;
@@ -47,7 +54,7 @@ const TournamentStageResults = () => {
     };
 
     return (
-        <div className='rounded p-5'>
+        <div className={`rounded ${isMobile ? '' : 'p-5'}`}>
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                 <h3 className="mb-2 mb-md-0 text-center">
                     <label htmlFor="" className=''>Kết Quả Chặng Đua</label>
@@ -55,8 +62,8 @@ const TournamentStageResults = () => {
                 </h3>
             </div>
             <hr className="my-4" />
-            <div className="table-responsive">
-                <CTable className="table-bordered rounded table-striped text-center">
+            <div>
+                <CTable className="table-bordered rounded table-striped text-center tournament-table">
                     <CTableHead>
                         <CTableRow>
                             <CTableHeaderCell scope="col">Hạng</CTableHeaderCell>
@@ -74,7 +81,7 @@ const TournamentStageResults = () => {
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                        {results.map(ranker => {
+                        {currentResults.map(ranker => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
                             return (
                                 <CTableRow key={ranker.id}>
@@ -90,7 +97,6 @@ const TournamentStageResults = () => {
                                     <CTableDataCell>{ranker.totalTime}</CTableDataCell>
                                     <CTableDataCell>{ranker.speed.toFixed(6)}</CTableDataCell>
                                     <CTableDataCell>{ranker.pointKey}</CTableDataCell>
-
                                 </CTableRow>
                             );
                         })}

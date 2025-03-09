@@ -2322,3 +2322,23 @@ section,
   height: 230px; /* Set the desired height */
   object-fit: cover; /* Ensure the image covers the entire area */
 }
+
+.tournament-table {
+  font-size: 1rem;
+  width: 100vw; /* Đặt chiều rộng của bảng là 100vw */
+  max-width: 90%; /* Đảm bảo bảng không vượt quá chiều rộng của màn hình */
+  margin: 0 auto; /* Căn giữa bảng */
+}
+
+@media (max-width: 768px) {
+  .tournament-table {
+    font-size: 0.23rem; /* Điều chỉnh kích thước chữ khi ở chế độ điện thoại */
+    width: 100vw; /* Đảm bảo chiều rộng của bảng là 100vw */
+    overflow-x: auto; /* Cho phép cuộn ngang nếu cần thiết */
+  }
+
+  .tournament-table th,
+  .tournament-table td {
+    padding: 0; /* Giảm padding để bảng nhỏ gọn hơn */
+  }
+}
