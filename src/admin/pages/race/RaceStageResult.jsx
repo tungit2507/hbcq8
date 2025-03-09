@@ -7,6 +7,7 @@ const TournamentStageResults = () => {
   const [results, setResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFinished, setIsFinished] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const resultsPerPage = 10;
 
   const location = useLocation();
@@ -35,6 +36,13 @@ const TournamentStageResults = () => {
 
     getStageStatus();
     fetchResults();
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [tourId, stageId]);
 
   const indexOfLastResult = currentPage * resultsPerPage;
@@ -51,7 +59,7 @@ const TournamentStageResults = () => {
   };
 
   return (
-    <div className='rounded p-5'>
+    <div className={`rounded ${isMobile ? '' : 'p-5'}`}>
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
         <h3 className="mb-2 mb-md-0 text-center">
           <label htmlFor="" className=''>Kết Quả Chặng Đua</label>
@@ -59,8 +67,8 @@ const TournamentStageResults = () => {
         </h3>
       </div>
       <hr className="my-4" />
-      <div className="table-responsive">
-        <CTable className="table-bordered rounded table-striped text-center">
+      <div>
+        <CTable className="table-bordered rounded table-striped text-center tournament-table">
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">Hạng</CTableHeaderCell>
@@ -75,7 +83,6 @@ const TournamentStageResults = () => {
               <CTableHeaderCell scope="col">Thời Gian Bay Hoàn Thành</CTableHeaderCell>
               <CTableHeaderCell scope="col">Vận Tốc</CTableHeaderCell>
               <CTableHeaderCell scope="col">Mã Số Bí Mật</CTableHeaderCell>
-
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -95,7 +102,6 @@ const TournamentStageResults = () => {
                   <CTableDataCell>{ranker.totalTime}</CTableDataCell>
                   <CTableDataCell>{ranker.speed}</CTableDataCell>
                   <CTableDataCell>{ranker.pointKey}</CTableDataCell>
-
                 </CTableRow>
               );
             })}

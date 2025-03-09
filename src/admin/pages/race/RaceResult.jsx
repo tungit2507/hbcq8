@@ -7,6 +7,7 @@ const TournamentResults = () => {
   const [results, setResults] = useState([]);
   const [tour, setTour] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const resultsPerPage = 10;
 
   const location = useLocation();
@@ -35,6 +36,13 @@ const TournamentResults = () => {
 
     fetchTourInfo();
     fetchResults();
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [tourId]);
 
   const indexOfLastResult = currentPage * resultsPerPage;
@@ -51,7 +59,7 @@ const TournamentResults = () => {
   };
 
   return (
-    <div className='rounded p-5'>
+    <div className={`rounded ${isMobile ? '' : 'p-5'}`}>
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
         <h3 className="mb-2 mb-md-0 text-center">
           <label htmlFor="" className=''>Kết Quả Giải Đua : </label>
@@ -60,7 +68,7 @@ const TournamentResults = () => {
       </div>
       <hr className="my-4" />
       <div className="table-responsive">
-        <CTable className="table-bordered rounded table-striped text-center">
+        <CTable className="table-bordered rounded table-striped text-center tournament-table">
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">Hạng</CTableHeaderCell>
