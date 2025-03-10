@@ -260,7 +260,7 @@ const TournamentList = () => {
                       }}>KQ Chặng Đua</CButton>
                     )}
                   <CButton className='m-1'
-                      color="primary" onClick={() => {
+                      color="info" onClick={() => {
                         navigate(`/register-list?tourId=${tournament.tourId}`);
                       }}>Danh Sách Đăng Ký</CButton>                   
                 </CTableDataCell>
