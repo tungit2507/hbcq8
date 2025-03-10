@@ -23,7 +23,7 @@ const UserManagementUpdate = () => {
         const fetchedUser = await getOneUser(userId);
         setUser(fetchedUser);
         setValue('username', fetchedUser.username);
-        setValue('email', fetchedUser.email);
+        // setValue('email', fetchedUser.email);
         setValue('address', fetchedUser.address);
         setValue('phone', fetchedUser.phone);
         setValue('birthday', moment(fetchedUser.birthday, ['DD/MM/YYYY']).format('YYYY-MM-DD')); 
@@ -88,21 +88,6 @@ const UserManagementUpdate = () => {
                   {errors.username && <div className="invalid-feedback">{errors.username.message}</div>}
                 </CCol>
                 <CCol md={6}>
-                  <CFormLabel htmlFor="email">Email</CFormLabel>
-                  <CFormInput
-                    type="email"
-                    id="email"
-                    {...register('email', { required: 'Email là bắt buộc' })}
-                    invalid={!!errors.email}
-                    disabled
-                  />
-                  {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
-                </CCol>
-              </CRow>
-              <CRow className="mb-3">
-                <CCol md={12}>
-                  <CRow>
-                    <CCol md={6}>
                       <CFormLabel htmlFor="address">Địa chỉ</CFormLabel>
                       <CFormInput
                         type="text"
@@ -112,6 +97,20 @@ const UserManagementUpdate = () => {
                       />
                       {errors.address && <div className="invalid-feedback">{errors.address.message}</div>}
                     </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={12}>
+                  <CRow>
+                  <CCol md={6}>
+                  <CFormLabel htmlFor="birthday">Ngày Sinh</CFormLabel>
+                  <CFormInput
+                    type="date"
+                    id="birthday"
+                    {...register('birthday', { required: 'Ngày sinh là bắt buộc' })}
+                    invalid={!!errors.birthday}
+                  />
+                  {errors.birthday && <div className="invalid-feedback">{errors.birthday.message}</div>}
+                </CCol>
                     <CCol md={6}>
                       <CFormLabel htmlFor="phone">Số điện thoại</CFormLabel>
                       <CFormInput
@@ -129,18 +128,6 @@ const UserManagementUpdate = () => {
                       {errors.phone && <div className="invalid-feedback">{errors.phone.message}</div>}
                     </CCol>
                   </CRow>
-                </CCol>
-              </CRow>
-              <CRow className="mb-3">
-                <CCol md={6}>
-                  <CFormLabel htmlFor="birthday">Ngày Sinh</CFormLabel>
-                  <CFormInput
-                    type="date"
-                    id="birthday"
-                    {...register('birthday', { required: 'Ngày sinh là bắt buộc' })}
-                    invalid={!!errors.birthday}
-                  />
-                  {errors.birthday && <div className="invalid-feedback">{errors.birthday.message}</div>}
                 </CCol>
               </CRow>
               <CRow>

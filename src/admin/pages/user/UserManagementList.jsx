@@ -164,7 +164,7 @@ const UserManagementList = () => {
             <CTableRow>
               <CTableHeaderCell scope="col">STT</CTableHeaderCell>
               <CTableHeaderCell scope="col">Tên Đăng Nhập</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+              {/* <CTableHeaderCell scope="col">Email</CTableHeaderCell> */}
               <CTableHeaderCell scope="col">Số Điện Thoại</CTableHeaderCell>
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
@@ -174,7 +174,7 @@ const UserManagementList = () => {
               <CTableRow key={user.id}>
                 <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                 <CTableDataCell>{user.username}</CTableDataCell>
-                <CTableDataCell>{user.email}</CTableDataCell>
+                {/* <CTableDataCell>{user.email}</CTableDataCell> */}
                 <CTableDataCell>{user.phone}</CTableDataCell>
                 <CTableDataCell>
                   <Link className="m-1 btn btn-warning btn-sm" to={`/admin/management/bird/list?user=${user.id}`}>QL Chiến Binh</Link>

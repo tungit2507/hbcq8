@@ -17,7 +17,7 @@ const UserManagementAdd = () => {
     try {
       const formData = new FormData();
       formData.append('username', data.username);
-      formData.append('email', data.email);
+      // formData.append('email', data.email);
       formData.append('phone', data.phone);
       formData.append('birthday', data.birthday);
       formData.append('password', data.password);
@@ -64,14 +64,20 @@ const UserManagementAdd = () => {
                   {errors.username && <div className="invalid-feedback">{errors.username.message}</div>}
                 </CCol>
                 <CCol md={6}>
-                  <CFormLabel htmlFor="email">Email</CFormLabel>
+                  <CFormLabel htmlFor="password">Mật Khẩu</CFormLabel>
                   <CFormInput
-                    type="email"
-                    id="email"
-                    {...register('email', { required: 'Email là bắt buộc' })}
-                    invalid={!!errors.email}
+                    type="password"
+                    id="password"
+                    {...register('password', { 
+                      required: 'Mật khẩu là bắt buộc', 
+                      minLength: {
+                        value: 6,
+                        message: 'Mật khẩu phải có ít nhất 6 ký tự'
+                      }
+                    })}
+                    invalid={!!errors.password}
                   />
-                  {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
+                  {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
                 </CCol>
               </CRow>
               <CRow className="mb-3">
@@ -100,24 +106,6 @@ const UserManagementAdd = () => {
                     invalid={!!errors.birthday}
                   />
                   {errors.birthday && <div className="invalid-feedback">{errors.birthday.message}</div>}
-                </CCol>
-              </CRow>
-              <CRow className="mb-3">
-                <CCol md={6}>
-                  <CFormLabel htmlFor="password">Mật Khẩu</CFormLabel>
-                  <CFormInput
-                    type="password"
-                    id="password"
-                    {...register('password', { 
-                      required: 'Mật khẩu là bắt buộc', 
-                      minLength: {
-                        value: 6,
-                        message: 'Mật khẩu phải có ít nhất 6 ký tự'
-                      }
-                    })}
-                    invalid={!!errors.password}
-                  />
-                  {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
                 </CCol>
               </CRow>
               <CRow>

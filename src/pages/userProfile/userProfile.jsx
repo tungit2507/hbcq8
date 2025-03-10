@@ -115,25 +115,13 @@ const Profile = () => {
               <form onSubmit={handleSubmit(onSubmit)} >
                 <div className="row gx-3 mb-3">
                   <div className="mb-3">
-                    <label className="small mb-1" htmlFor="inputEmailAddress">Email</label>
-                    <input 
-                      className="form-control" 
-                      id="inputEmailAddress" 
-                      type="email" 
-                      placeholder="" 
-                      readOnly 
-                      defaultValue={user.email} // Sử dụng defaultValue
-                      {...register('email')}
-                    />
-                  </div>
-                  <div className="mb-3">
                     <label className="small mb-1" htmlFor="inputPhonenumber">Số Điện Thoại</label>
                     <input 
                       className="form-control" 
                       id="inputPhonenumber" 
                       type="text" 
                       placeholder="Enter your phone number" 
-                      defaultValue={user.phone} // Sử dụng defaultValue
+                      defaultValue={user.phone}
                       {...register('phone', { 
                         required: 'Vui Lòng Nhập Số điện thoại', 
                         pattern: {

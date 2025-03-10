@@ -68,7 +68,7 @@ const RegistrationForm = () => {
                     />
                     {errors.username && <span className="error">{errors.username.message}</span>}
                   </div>
-                  <div className="mb-3">
+                  {/* <div className="mb-3">
                     <input
                       type="email"
                       {...register('email', { 
@@ -79,7 +79,7 @@ const RegistrationForm = () => {
                       placeholder="Địa chỉ email"
                     />
                     {errors.email && <span className="error">{errors.email.message}</span>}
-                  </div>
+                  </div> */}
                   <div className="mb-3">
                     <input
                       type="text"
