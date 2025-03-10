@@ -259,13 +259,10 @@ const TournamentList = () => {
                         navigate(`/tour-stage?tourId=${tournament.tourId}`);
                       }}>KQ Chặng Đua</CButton>
                     )}
-                     {tournament.isFinished === true && (
                   <CButton className='m-1'
                       color="primary" onClick={() => {
                         navigate(`/register-list?tourId=${tournament.tourId}`);
-                      }}>Danh Sách Đăng Ký</CButton>
-                    )}
-                    
+                      }}>Danh Sách Đăng Ký</CButton>                   
                 </CTableDataCell>
               </CTableRow>
             ))}
