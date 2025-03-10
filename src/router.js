@@ -50,6 +50,7 @@ import ArticleUpdate from "./admin/pages/article/ArticleUpdate";
 import Info from "./admin/pages/info/Info";
 import AboutUsInfoManagement from "./admin/pages/info/AboutUsInfoManagement";
 import AuthRouter from "./admin/auth/AuthRouter";
+import RegisterList from "./pages/tournament/RegisterList";
 
 const routes = createBrowserRouter([
     
@@ -76,6 +77,8 @@ const routes = createBrowserRouter([
             { path: "/tour-detail", element: <ReachDestination/> },
             { path: "/tour-stage", element: <TournamentStageToResults/> },
             { path: "/change-password", element: <ChangePassword/> },
+            { path: "/register-list", element: <RegisterList/> },
+
         ]
     },
     {
