@@ -13,8 +13,6 @@ const readFileData = (file) => {
     });
 };
 
-//param: file -> the input file (e.g. event.target.files[0])
-//return: images -> an array of images encoded in base64 
 export const convertPdfToImages = async (file) => {
     const images = [];
     const data = await readFileData(file);

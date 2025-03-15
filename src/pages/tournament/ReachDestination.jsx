@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { convertPdfToImages } from '../../assets/util/PdfAsImage';
 
 const ReachDestination = () => {
-
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const tourId = query.get('tourId');
@@ -16,9 +15,9 @@ const ReachDestination = () => {
     const [birdCodes, setBirdCodes] = useState([]);
     const [tourStages, setTourStages] = useState([]);
     const [tourStageReport, setTourStageReport] = useState('');
+    const [reportImage, setReportImage] = useState(null); 
 
     const handleAddReport = () => {
-        
         if (!report.birdCode || !report.secretCode) {
             toast.error('Vui lòng nhập đầy đủ thông tin.');
             return;
@@ -49,30 +48,16 @@ const ReachDestination = () => {
                     stageId: tourStageReport.stageId
                 };
                 axiosInstance.post('/tour/submit', formData, { responseType: 'blob' })
-                    .then( async response => {
+                    .then(async (response) => {
                         const file = new Blob([response.data], { type: 'application/pdf' });
-                        const image = await convertPdfToImages(file);
-                        const pdfWindow = window.open('', '_blank');
-                        pdfWindow.document.write('<html><head><title>Report Images</title></head><body>');
-                        pdfWindow.document.write(`
-                            <div style="margin-bottom: 20px; text-align: center;">
-                              <img src="${image}" alt="Report Image" style="width: 100%; max-width: 800px;"/>
-                              <br/>
-                              <a href="${image}" download="report_image.png" style="text-decoration: none; color: blue;">Download Image</a>
-                            </div>
-                          `);
-                          pdfWindow.document.write('</body></html>');
-                          pdfWindow.document.close();
-                        const link = document.createElement('a');
-                        link.href = image;
-                        link.download = 'report_image.png';
-                        link.click();
+                        const image = await convertPdfToImages(file); // Convert PDF to image
+                        setReportImage(image); 
                     })
                     .catch(error => {
-                        if(error?.response?.status === 408) {
+                        if (error?.response?.status === 408) {
                             const errorMessage = "Quá thời hạn chỉnh sửa lại";
                             toast.error(errorMessage, error);
-                        }else{
+                        } else {
                             const errorMessage = "Báo cáo không thành công";
                             toast.error(errorMessage, error);
                         }
@@ -95,7 +80,6 @@ const ReachDestination = () => {
     };
 
     useEffect(() => {
-    
         fetchData();
     }, [tourId]);
 
@@ -124,7 +108,6 @@ const ReachDestination = () => {
                             {tourStages.map((tourStage, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell>{tourStage.orderNo}</CTableDataCell>
-                                    {/* <CTableDataCell>{tourStage.startPointCode}</CTableDataCell> */}
                                     <CTableDataCell>
                                         {tourStage.isActived && (
                                             <CButton color='danger' onClick={() => openReportModal(tourStage)}>Báo Cáo</CButton>
@@ -171,6 +154,14 @@ const ReachDestination = () => {
                     <CButton color="primary" onClick={handleAddReport}>Báo Cáo</CButton>
                 </CModalFooter>
             </CModal>
+
+            {reportImage && (
+                <div className="mt-4 text-center">
+                    <h5>Hình Ảnh Báo Cáo</h5>
+                    <img className='report-image' src={reportImage} alt="Report"/>
+                </div>
+            )}
+
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
