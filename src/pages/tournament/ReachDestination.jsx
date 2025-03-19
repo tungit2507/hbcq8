@@ -22,13 +22,6 @@ const ReachDestination = () => {
             toast.error('Vui lòng nhập đầy đủ thông tin.');
             return;
         }
-        
-        // if (!/^\d{5}$/.test(report.secretCode)) {
-        //     toast.error('Mã bí mật phải có 5 số.');
-        //     return;
-        // }
-
-
 
         Swal.fire({
             title: 'Xác Nhận Báo Cáo',

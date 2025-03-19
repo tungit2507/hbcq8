@@ -28,6 +28,7 @@ const TournamentList = () => {
 
   const totalPages = Math.ceil((Array.isArray(tournamentsData) ? tournamentsData.length : 0) / tournamentsPerPage);
   const [userBirds, setUserBirds] = useState([]);
+  const [birdNumber, setBirdNumber] = useState(1);
 
   const fetchTournaments = async () => {
     try {
@@ -120,7 +121,7 @@ const TournamentList = () => {
       requesterId: currentUser,
       createdBy: currentUser,
       createdAt: currentTime,
-      birdCode: birdCodes
+      birdNumber: birdNumber,
     };
 
     axioInstance.post('/tour-apply', requestData, {
@@ -302,21 +303,23 @@ const TournamentList = () => {
           <CModalTitle>Đăng ký chiến binh</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          {userBirds.map(bird => (
-            <CFormCheck
-              key={bird.id}
-              id={`bird-${bird.id}`}
-              label={bird.code}
-              checked={selectedBirds.includes(bird.code)}
-              onChange={() => handleBirdSelection(bird.code)}
-            />
-          ))}
+          <label htmlFor="">Số lượng chiến Binh</label>
+          <CFormInput
+            min={1}
+            max={100}  
+            type="number"
+            placeholder="Nhập số lượng chiến binh"
+            style={{ borderRadius: '0.25rem', border: '1px solid #ced4da', padding: '0.375rem 0.75rem' }}
+            className="me-2 flex-grow-1"
+            value={birdNumber}
+            onChange={(e) => setBirdNumber(e.target.value)}>
+          </CFormInput>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setShowPopup(false)}>
             Hủy
           </CButton>
-          <CButton color="primary" onClick={handleRegister} disabled={selectedBirds.length === 0}>
+          <CButton color="primary" onClick={handleRegister} disabled={birdNumber <= 0}>
             Đăng ký
           </CButton>
         </CModalFooter>

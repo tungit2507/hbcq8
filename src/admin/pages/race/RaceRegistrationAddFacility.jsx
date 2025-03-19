@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchFacilities } from '../../api/FacilityApi';
-import { CForm, CFormLabel, CFormInput, CButton, CRow, CCol, CFormSelect } from '@coreui/react';
+import { CForm, CFormLabel, CFormInput, CButton, CRow, CCol, CFormSelect, CCard, CCardBody, CCardHeader } from '@coreui/react';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { calculdateDistance, getRaceRegistrationDetail } from '../../api/raceRegistration';
-import { fetchRaceById } from '../../api/raceApi';
-import { CCard, CCardBody, CCardHeader } from '@coreui/react';
+import { calculdateDistance, getRaceRegistrationDetail, approveRaceRegistration } from '../../api/raceRegistration';
+import { fetchBirds } from '../../api/BirdApi';
 import { toast } from 'react-toastify';
-import { approveRaceRegistration } from '../../api/raceRegistration';
 import { showErrorNotification, showSuccessNotification } from '../../api/sweetAlertNotify';
-import { useNavigate } from 'react-router-dom';
 
 const RaceRegistrationAddFacility = () => {
   const location = useLocation();
@@ -21,7 +18,8 @@ const RaceRegistrationAddFacility = () => {
   const { fields, append, remove } = useFieldArray({ control, name: 'selectedFacilities' });
 
   const [facilities, setFacilities] = useState([]);
-  const [raceRegistration, setRaceRegistration] = useState(null);
+  const [birds, setBirds] = useState([]);
+  const [approvedBirds, setApprovedBirds] = useState([]); // State for approved bird codes
   const [race, setRace] = useState(null);
   const [stageDistances, setStageDistances] = useState([]);
   const navigate = useNavigate();
@@ -34,21 +32,22 @@ const RaceRegistrationAddFacility = () => {
 
         const race = await getRaceRegistrationDetail(raceId, requesterId);
         setRace(race[0]);
+
+        const birdsData = await fetchBirds(requesterId);
+        setBirds(birdsData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, [raceId, requesterId, setValue]);
-
 
   const handleFacilityChange = async (index, facilityCode) => {
     try {
       const selectedFacility = facilities.find(f => f.code === facilityCode);
       const startPointCoor = race.tourStages[index].startPointCoor;
       const endPointCoor = selectedFacility.pointCoor;
-      const distance = await calculdateDistance(startPointCoor,endPointCoor);
+      const distance = await calculdateDistance(startPointCoor, endPointCoor);
 
       setStageDistances(prevDistances => {
         const newDistances = [...prevDistances];
@@ -62,39 +61,45 @@ const RaceRegistrationAddFacility = () => {
     }
   };
 
+  const handleBirdCheck = (birdCode) => {
+    setApprovedBirds(prevApprovedBirds => {
+      if (prevApprovedBirds.includes(birdCode)) {
+        // Remove birdCode if already checked
+        return prevApprovedBirds.filter(code => code !== birdCode);
+      } else {
+        // Add birdCode if not already checked
+        return [...prevApprovedBirds, birdCode];
+      }
+    });
+  };
+
   const onSubmit = async (data) => {
     try {
-      const tourStages = data.selectedFacilities.map((facility, index) => {
-      
+      const tourStages = data.selectedFacilities.map((facility, index) => ({
+        stageId: race.tourStages[index].stageId,
+        endPointCode: facility.code,
+        endPointCoor: facilities.find(f => f.code === facility.code).pointCoor,
+        endPointDist: facility.distance,
+      }));
 
-        return {
-          stageId: race.tourStages[index].stageId,
-          endPointCode: facility.code,
-          endPointCoor: facilities.find(f => f.code === facility.code).pointCoor,
-          endPointDist: facility.distance
-        };
-      });
-      
       const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
       const formData = {
         tourId: raceId,
         requesterId: requesterId,
         approverId: currentUser.id,
-        tourStages
+        approvedBirds, // Include approved bird codes
+        tourStages,
       };
 
       await approveRaceRegistration(formData);
       showSuccessNotification("Đơn đăng ký đã được duyệt thành công");
-      navigate(`/admin/management/race/registration-list?id=${raceId}`)
+      navigate(`/admin/management/race/registration-list?id=${raceId}`);
     } catch (error) {
       console.error('Error approving race registration:', error);
       showErrorNotification("Lỗi khi duyệt đơn đăng ký. Vui lòng thử lại sau.");
     }
   };
-
-
-  
 
   return (
     <CRow className="justify-content-center">
@@ -111,7 +116,6 @@ const RaceRegistrationAddFacility = () => {
                     <CFormLabel>Điểm Xuất Phát {index + 1}</CFormLabel>
                     <CFormInput
                       type="text"
-                      id={`field.startTime`}
                       value={field.startPointCode + ' - ' + field.startPointName}
                       readOnly
                     />
@@ -133,7 +137,6 @@ const RaceRegistrationAddFacility = () => {
                     <CFormLabel htmlFor={`selectedFacilities[${index}].distance`}>Khoảng Cách (kilômét)</CFormLabel>
                     <CFormInput
                       type="number"
-                      id={`selectedFacilities[${index}].distance`}
                       {...register(`selectedFacilities[${index}].distance`, { required: 'Số mét chặng là bắt buộc' })}
                       value={stageDistances[index] || ''}
                       readOnly
@@ -141,9 +144,30 @@ const RaceRegistrationAddFacility = () => {
                   </CCol>
                 </CRow>
               ))}
+
+              <h5 className="mt-4">Danh Sách Chiến Binh</h5>
+              <CRow>
+                {birds?.map(bird => (
+                  <CCol md={2} key={bird.id} className="mb-3">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={`bird-${bird.code}`}
+                        checked={approvedBirds.includes(bird.code)}
+                        onChange={() => handleBirdCheck(bird.code)}
+                      />
+                      <label className="form-check-label" htmlFor={`bird-${bird.code}`}>
+                        {bird.code}
+                      </label>
+                    </div>
+                  </CCol>
+                ))}
+              </CRow>
+
               <CRow>
                 <CCol>
-                  <CButton type="submit" color="primary">Duyệt Đơn Đăng Ký</CButton>
+                  <CButton type="submit" color="primary" disabled={approvedBirds.length <= 0}>Duyệt Đơn Đăng Ký</CButton>
                 </CCol>
               </CRow>
             </CForm>

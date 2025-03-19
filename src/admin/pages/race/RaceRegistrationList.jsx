@@ -158,7 +158,7 @@ const RaceRegistrationList = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">Tên Người Đăng Ký</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Mã Kiềng</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Số Lượng Chiến Binh Dự Kiến</CTableHeaderCell>
               <CTableHeaderCell scope="col">Ngày Đăng Ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Trạng Thái</CTableHeaderCell>
               <CTableHeaderCell scope="col">Người Phê Duyệt</CTableHeaderCell>
@@ -171,11 +171,7 @@ const RaceRegistrationList = () => {
               <CTableRow key={registration.tourid}>
                 <CTableDataCell>{registration.requesterName}</CTableDataCell>
                 <CTableDataCell>
-                  {registration.birdCodes && registration.birdCodes.length > 0 ? (
-                    registration.birdCodes.join(", ")
-                  ) : (
-                    "Không có mã chim"
-                  )}
+                  {registration.birdNumber? registration.birdNumber : "Không thể hiển thị"}
                 </CTableDataCell>
                 <CTableDataCell>{new Date(registration.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</CTableDataCell>
                 <CTableDataCell>
