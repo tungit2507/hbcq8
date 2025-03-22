@@ -115,16 +115,12 @@ const TournamentList = () => {
 
     const requestData = {
       tourId: selectedTournamentId,
-      tourName: selectedTournament ? selectedTournament.tourName : '',
-      tourStartDate: selectedTournament ? selectedTournament.startDate : '',
-      tourEndDate: selectedTournament ? selectedTournament.endDate : '',
       requesterId: currentUser,
       createdBy: currentUser,
-      createdAt: currentTime,
-      birdNumber: birdNumber,
+      birdsNum: birdNumber,
     };
 
-    axioInstance.post('/tour-apply', requestData, {
+    axioInstance.post('/tour-register-temp', requestData, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
@@ -229,7 +225,7 @@ const TournamentList = () => {
                         }).then(async (result) => {
                           if (result.isConfirmed) {
                             try {
-                              const response = await axioInstance.get('/tour-apply/cancel', { 
+                              const response = await axioInstance.get('/tour-register-temp/cancel', { 
                                 params: { tourId: tournament.tourId },
                                 withCredentials: true 
                               });
@@ -324,7 +320,7 @@ const TournamentList = () => {
           </CButton>
         </CModalFooter>
       </CModal>
-    <ToastContainer 
+    <ToastContainer t
       position="top-center"
       autoClose={5000}
       hideProgressBar={false}
