@@ -31,7 +31,7 @@ const RaceRegistrationAddFacility = () => {
         setFacilities(facilitiesData);
 
         const race = await getRaceRegistrationDetail(raceId, requesterId);
-        setRace(race[0]);
+        setRace(race);
 
         const birdsData = await fetchBirds(requesterId);
         setBirds(birdsData);
