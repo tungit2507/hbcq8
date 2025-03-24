@@ -41,7 +41,7 @@ const RaceRegistrationList = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = registrations.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const currentItems = registrations?.slice(indexOfFirstItem, indexOfLastItem) || [];
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -94,16 +94,20 @@ const RaceRegistrationList = () => {
           confirmButtonText: 'Gửi',
           cancelButtonText: 'Hủy',
         }).then( async (reasonResult) => {
-          if (reasonResult.isConfirmed) {
-            const formData = new FormData();
-            const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-            formData.append('tourId', raceId);
-            formData.append('requesterId', requesterId);
-            formData.append('approverId', currentUser.id); 
-            formData.append('memo', reasonResult.value);
-            const response = await rejectRaceRegistration(formData)
-            Swal.fire('Đã từ chối!', 'Đăng ký đã bị từ chối.', 'success');
-            setRegistrations(await fetchRaceRegistrationByRaceId(raceId));
+          try {
+            if (reasonResult.isConfirmed) {
+              const formData = new FormData();
+              const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+              formData.append('tourId', raceId);
+              formData.append('requesterId', requesterId);
+              formData.append('approverId', currentUser.id); 
+              formData.append('memo', reasonResult.value);
+              const response = await rejectRaceRegistration(formData)
+              Swal.fire('Đã từ chối!', 'Đăng ký đã bị từ chối.', 'success');
+              setRegistrations(await fetchRaceRegistrationByRaceId(raceId));
+            }
+          } catch (error) {
+            Swal.fire('Thất Bại!', 'Yêu cầu từ chối thất bại!', 'success');
           }
         });
       }
@@ -158,7 +162,8 @@ const RaceRegistrationList = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">Tên Người Đăng Ký</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Số Chiến Binh</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Số CB Dự Kiến</CTableHeaderCell>
+              
               <CTableHeaderCell scope="col">Mã Kiềng</CTableHeaderCell>
               <CTableHeaderCell scope="col">Ngày Đăng Ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Trạng Thái</CTableHeaderCell>
@@ -174,7 +179,11 @@ const RaceRegistrationList = () => {
                 <CTableDataCell>
                   {registration.birdsNum? registration.birdsNum : "Không thể hiển thị"}
                 </CTableDataCell>
-                <CTableDataCell>{registration.birdCodes}</CTableDataCell>
+                <CTableDataCell>
+                  {Array.isArray(registration.birdCodes) && registration.birdCodes.length > 0
+                    ? registration.birdCodes.join(', ') // Join bird codes with commas
+                    : "Không có mã kiềng"}
+                </CTableDataCell>                
                 <CTableDataCell>{new Date(registration.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</CTableDataCell>
                 <CTableDataCell>
                   {registration.statusCode === 'W' && "Đang Chờ Duyệt"}
@@ -199,7 +208,7 @@ const RaceRegistrationList = () => {
           </CTableBody>
         </CTable>
       </div>
-      {selectedRegistrations.length > 0 && (
+      {selectedRegistrations?.length > 0 && (
         <CButton color="primary" onClick={handleApproveAll} className="mt-3">Duyệt Tất Cả</CButton>
       )}
       <hr />
@@ -211,7 +220,7 @@ const RaceRegistrationList = () => {
           >
             Trước
           </CPaginationItem>
-          {[...Array(Math.ceil(registrations.length / itemsPerPage)).keys()].map(number => (
+          {[...Array(Math.ceil(registrations?.length / itemsPerPage)).keys()].map(number => (
             <CPaginationItem
               key={number + 1}
               active={number + 1 === currentPage}
@@ -222,7 +231,7 @@ const RaceRegistrationList = () => {
           ))}
           <CPaginationItem
             onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === Math.ceil(registrations.length / itemsPerPage)}
+            disabled={currentPage === Math.ceil(registrations?.length / itemsPerPage)}
           >
             Tiếp
           </CPaginationItem>

@@ -19,7 +19,7 @@ const RaceRegistrationAddFacility = () => {
 
   const [facilities, setFacilities] = useState([]);
   const [birds, setBirds] = useState([]);
-  const [approvedBirds, setApprovedBirds] = useState([]); // State for approved bird codes
+  const [birdCodes, setBirdCodes] = useState([]); // Updated from approvedBirds to birdCodes
   const [race, setRace] = useState(null);
   const [stageDistances, setStageDistances] = useState([]);
   const navigate = useNavigate();
@@ -62,13 +62,13 @@ const RaceRegistrationAddFacility = () => {
   };
 
   const handleBirdCheck = (birdCode) => {
-    setApprovedBirds(prevApprovedBirds => {
-      if (prevApprovedBirds.includes(birdCode)) {
+    setBirdCodes(prevBirdCodes => {
+      if (prevBirdCodes.includes(birdCode)) {
         // Remove birdCode if already checked
-        return prevApprovedBirds.filter(code => code !== birdCode);
+        return prevBirdCodes.filter(code => code !== birdCode);
       } else {
         // Add birdCode if not already checked
-        return [...prevApprovedBirds, birdCode];
+        return [...prevBirdCodes, birdCode];
       }
     });
   };
@@ -88,7 +88,7 @@ const RaceRegistrationAddFacility = () => {
         tourId: raceId,
         requesterId: requesterId,
         approverId: currentUser.id,
-        approvedBirds, // Include approved bird codes
+        birdCodes, // Updated from approvedBirds to birdCodes
         tourStages,
       };
 
@@ -154,7 +154,7 @@ const RaceRegistrationAddFacility = () => {
                         type="checkbox"
                         className="form-check-input"
                         id={`bird-${bird.code}`}
-                        checked={approvedBirds.includes(bird.code)}
+                        checked={birdCodes.includes(bird.code)} // Updated from approvedBirds to birdCodes
                         onChange={() => handleBirdCheck(bird.code)}
                       />
                       <label className="form-check-label" htmlFor={`bird-${bird.code}`}>
@@ -167,7 +167,7 @@ const RaceRegistrationAddFacility = () => {
 
               <CRow>
                 <CCol>
-                  <CButton type="submit" color="primary" disabled={approvedBirds.length <= 0}>Duyệt Đơn Đăng Ký</CButton>
+                  <CButton type="submit" color="primary" disabled={birdCodes.length <= 0}>Duyệt Đơn Đăng Ký</CButton>
                 </CCol>
               </CRow>
             </CForm>

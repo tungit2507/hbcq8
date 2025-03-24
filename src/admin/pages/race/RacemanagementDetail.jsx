@@ -36,6 +36,7 @@ const DetailRaceForm = () => {
       setRace(data);
       setValue('name', data.name);
       setValue('totalBirds', data.totalBirds);
+      setValue('totalBirdsFact', data.totalBirdsFact);
       setValue('description', data.description);
       setValue('birdsNum', data.birdsNum);
       setValue('startDateInfo', data.startDateInfo.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5'));
@@ -327,8 +328,19 @@ const DetailRaceForm = () => {
                 </CRow>
               ))}
               <CRow className="mb-3">
-                <CCol className='' md={12}>
-                <CFormLabel htmlFor="totalBirds" className='d-flex justify-content-center'><strong>Tổng Số Chiến Binh</strong></CFormLabel>
+                <CCol className='' md={6}>
+                <CFormLabel htmlFor="totalBirdsFact" className='d-flex justify-content-center'><strong>Tổng Số Chiến Binh Dự Kiến</strong></CFormLabel>
+                  <CFormInput 
+                    className='text-center'
+                    type="text"
+                    id="totalBirdsFact"
+                    {...register('totalBirdsFact', { required: '' })}
+                    invalid={!!errors.endDateReceive}
+                    readOnly
+                  />
+                </CCol>
+                <CCol className='' md={6}>
+                <CFormLabel htmlFor="totalBirds" className='d-flex justify-content-center'><strong>Tổng Số Chiến Binh Thực Tế</strong></CFormLabel>
                   <CFormInput 
                     className='text-center'
                     type="text"
