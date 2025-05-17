@@ -198,7 +198,7 @@ const TournamentList = () => {
                 <CTableDataCell>{tournament.memo}</CTableDataCell>
                 <CTableDataCell>
                   {(
-                    currentUser !== null && 
+                    currentUser !== null && tournament.tourApplyStatusCode === null &&
                     <CButton className='me-2'
                       hidden={tournament.isActivedForRegister === false}
                       color="primary" onClick={() => {
