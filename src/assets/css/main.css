@@ -2331,17 +2331,42 @@ section,
 }
 
 @media (max-width: 768px) {
-  .tournament-table {
-    font-size: 0.23rem; /* Điều chỉnh kích thước chữ khi ở chế độ điện thoại */
+  .tournament-table-rank {
+    font-size: 0.23rem; 
     width: 100vw; /* Đảm bảo chiều rộng của bảng là 100vw */
     overflow-x: auto; /* Cho phép cuộn ngang nếu cần thiết */
   }
 
-  .tournament-table th,
-  .tournament-table td {
-    padding: 0; /* Giảm padding để bảng nhỏ gọn hơn */
+  .tournament-table-rank th,
+  .tournament-table-rank td {
+    padding: 0;
+  }
+
+  .tournament.table button {
+    color: var(--default-color);
+    font-size: 0.25rem;
   }
 }
+
+
+@media (max-width: 768px) {
+  .tournament-table {
+    font-size: 0.7rem; 
+    width: 100vw; 
+    overflow-x: auto; 
+  }
+
+  .tournament-table th,
+  .tournament-table td {
+    padding: 0;
+  }
+
+  .tournament-table-button{
+    font-size: 0.7rem !important; 
+    padding: 0.25rem !important;
+  }
+}
+
 
 .report-image{
   width: 100%;

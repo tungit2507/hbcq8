@@ -6,7 +6,6 @@ import { toast, ToastContainer} from 'react-toastify';
 import Swal from 'sweetalert2';
 
 const TournamentList = () => {
-
   const [tournamentsData, setTournamentsData] = useState([]);
 
   const navigate = useNavigate();
@@ -107,6 +106,7 @@ const TournamentList = () => {
     const currentTime = new Date().toISOString();
     const selectedTournament = tournamentsData.find(tournament => tournament.tourId === selectedTournamentId);
   
+    
     Swal.fire({
       title: 'Xác nhận đăng ký',
       html: `<p>Bạn chắc chắn muốn đăng ký với số lượng chiến binh: <strong>${birdNumber}</strong>?</p>`,
@@ -149,7 +149,7 @@ const TournamentList = () => {
   };
 
   return (
-    <div className="p-3 rounded">
+    <div className="p-3 rounded ${isMobile ? '' : 'p-5'}`">
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
         <h3 className="mb-2 mb-md-0">Danh Sách Giải Đấu</h3>
         <CForm className="d-flex" style={{ maxWidth: "400px", width: "100%" }}>
@@ -161,13 +161,12 @@ const TournamentList = () => {
             style={{ borderRadius: '0.25rem', border: '1px solid #ced4da', padding: '0.375rem 0.75rem' }}
             className="me-2 flex-grow-1"
           />
-          {/* <CButton color="primary" onClick={handleSearch} style={{ borderRadius: '0.25rem', padding: '0.375rem 0.75rem' }}>Tìm Kiếm</CButton> */}
         </CForm>
       </div>
       <hr className="my-4" />
 
       <div className="table-responsive">
-        <CTable className="table-bordered rounded table-striped text-center">
+      <CTable className="table-bordered rounded table-striped text-center tournament-table">
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">ID</CTableHeaderCell>
@@ -203,7 +202,7 @@ const TournamentList = () => {
                 <CTableDataCell>
                   {(
                     currentUser !== null && tournament.tourApplyStatusCode === null &&
-                    <CButton className='me-2'
+                    <CButton className='me-2 tournament-table-button'
                       hidden={tournament.isActivedForRegister === false}
                       color="primary" onClick={() => {
                         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -246,21 +245,21 @@ const TournamentList = () => {
                             }
                           }
                         });
-                      }} className='m-1'>Hủy Đơn</CButton>
+                      }} className='m-1 tournament-table-button'>Hủy Đơn</CButton>
                   )}
                   {tournament.isFinished === true && (
-                    <CButton className='m-11'
+                    <CButton className='m-11 tournament-table-button'
                       color="warning" onClick={() => {
                         navigate(`/tournament-result?id=${tournament.tourId}`);
                       }}>KQ Giải Đua</CButton>
                   )}
                   {tournament.isFinished === true && (
-                  <CButton className='m-1'
+                  <CButton className='m-1 tournament-table-button'
                       color="primary" onClick={() => {
                         navigate(`/tour-stage?tourId=${tournament.tourId}`);
                       }}>KQ Chặng Đua</CButton>
                     )}
-                  <CButton className='m-1'
+                  <CButton className='m-1 tournament-table-button'
                       color="info" onClick={() => {
                         navigate(`/register-list?tourId=${tournament.tourId}`);
                       }}>Danh Sách Đăng Ký</CButton>                   

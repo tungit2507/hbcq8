@@ -63,7 +63,7 @@ const TournamentStageResults = () => {
             </div>
             <hr className="my-4" />
             <div>
-                <CTable className="table-bordered rounded table-striped text-center tournament-table">
+                <CTable className="table-bordered rounded table-striped text-center tournament-table-rank">
                     <CTableHead>
                         <CTableRow>
                             <CTableHeaderCell scope="col">Hạng</CTableHeaderCell>
