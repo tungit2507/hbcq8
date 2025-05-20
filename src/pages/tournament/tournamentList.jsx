@@ -106,42 +106,46 @@ const TournamentList = () => {
     const currentUser = localStorage.getItem('userId');
     const currentTime = new Date().toISOString();
     const selectedTournament = tournamentsData.find(tournament => tournament.tourId === selectedTournamentId);
-    
-    const jsonData = { birds: selectedBirds };
-    console.log(jsonData);
-
-    const birdCodes = jsonData.birds;
-    console.log(birdCodes);
-
-    const requestData = {
-      tourId: selectedTournamentId,
-      requesterId: currentUser,
-      createdBy: currentUser,
-      birdsNum: birdNumber,
-    };
-
-    axioInstance.post('/tour-register-temp', requestData, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
+  
+    Swal.fire({
+      title: 'Xác nhận đăng ký',
+      html: `<p>Bạn chắc chắn muốn đăng ký với số lượng chiến binh: <strong>${birdNumber}</strong>?</p>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const requestData = {
+          tourId: selectedTournamentId,
+          requesterId: currentUser,
+          createdBy: currentUser,
+          birdsNum: birdNumber,
+        };
+  
+        axioInstance.post('/tour-register-temp', requestData, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => {
+            console.log('Đăng ký giải đấu thành công:', response.data);
+            toast.success('Đăng ký giải đấu thành công!');
+            setTimeout(() => {
+              fetchTournaments();
+            }, 1000);
+          })
+          .catch((error) => {
+            console.error('Lỗi khi đăng ký giải đấu:', error);
+            const errorMessage = error?.response?.data?.errorMessage || 'Đã xảy ra lỗi khi đăng ký.';
+            toast.error(errorMessage);
+          });
+  
+        setShowPopup(false);
+        setSelectedBirds([]);
       }
-    })
-    .then(response => {
-      console.log('Đăng ký giải đấu thành công:', response.data);
-      toast.success('Đăng ký giải đấu thành công!');
-      setTimeout(() => {
-        fetchTournaments();
-      }, 1000);
-    })
-    .catch(error => {
-      console.log(error);
-      const errorMessage = error?.response?.data?.errorMessage;
-      const errorCode = error.response.data.errorCode;
-      console.error('Lỗi khi đăng ký giải đấu:', errorMessage, 'Mã lỗi:', errorCode);
-      toast.error(`${errorMessage}`);
     });
-    setShowPopup(false);
-    setSelectedBirds([]);
   };
 
   return (
