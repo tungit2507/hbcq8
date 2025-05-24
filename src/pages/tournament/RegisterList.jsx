@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem, CButton, CForm, CFormInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CFormCheck } from "@coreui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axioInstance from '../../apiInstance';
-import { toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 const RegisterList = () => {
 
@@ -29,10 +29,10 @@ const RegisterList = () => {
         toast.error('Đã xảy ra lỗi khi tải danh sách giải đấu. Dữ liệu không hợp lệ.');
       }
 
-  
+
     } catch (error) {
-        console.error('Lỗi khi tải danh sách giải đấu:', error);
-        toast.error('Đã xảy ra lỗi khi tải danh sách giải đấu. Vui lòng thử lại sau.');
+      console.error('Lỗi khi tải danh sách giải đấu:', error);
+      toast.error('Đã xảy ra lỗi khi tải danh sách giải đấu. Vui lòng thử lại sau.');
     }
   };
 
@@ -53,10 +53,9 @@ const RegisterList = () => {
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
         <h5 className="mb-2 mb-md-0">Số căn cứ đăng ký: {registerData.length}</h5>
       </div>
-     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
         <h5 className="mb-2 mb-md-0">
-          Số chiến binh đăng ký: {registerData.reduce((total, tournament) => total + tournament.birdCodes.length, 0)}
-        </h5>
+          Số chiến binh đăng ký: {registerData.reduce((total, tournament) => total + (Number(tournament.birdNumsRegistered) || 0), 0)}        </h5>
       </div>
       <hr className="my-4" />
 
@@ -73,30 +72,30 @@ const RegisterList = () => {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-  {registerData
-    .sort((a, b) => a.locationCode.localeCompare(b.locationCode, 'vi', { numeric: true })) // Sắp xếp theo mã căn cứ
-    .map(tournament => (
-      <CTableRow key={tournament.tourId}>
-        <CTableHeaderCell scope="row">{tournament.locationCode}</CTableHeaderCell>
-        <CTableDataCell>{tournament.requesterName}</CTableDataCell>
-        <CTableDataCell>{tournament.birdCodes.length}</CTableDataCell>
-        <CTableDataCell>{tournament.birdCodes.join(', ')}</CTableDataCell>
-        <CTableDataCell>{formatDate(tournament.createdAt)}</CTableDataCell>
-        <CTableDataCell>
-          {tournament.statusCode === 'R' ? 'Đã từ chối' : 
-           tournament.statusCode === 'A' ? 'Đã được duyệt' : 
-           tournament.statusCode === 'W' ? 'Đang chờ duyệt' : 
-           tournament.statusCode}
-        </CTableDataCell>
-      </CTableRow>
-    ))}
-  </CTableBody>
+            {registerData
+              .sort((a, b) => a.locationCode.localeCompare(b.locationCode, 'vi', { numeric: true })) // Sắp xếp theo mã căn cứ
+              .map(tournament => (
+                <CTableRow key={tournament.tourId}>
+                  <CTableHeaderCell scope="row">{tournament.locationCode}</CTableHeaderCell>
+                  <CTableDataCell>{tournament.requesterName}</CTableDataCell>
+                  <CTableDataCell>{tournament.birdNumsRegistered}</CTableDataCell>
+                  <CTableDataCell>{tournament.birdCodes.join(', ')}</CTableDataCell>
+                  <CTableDataCell>{formatDate(tournament.createdAt)}</CTableDataCell>
+                  <CTableDataCell>
+                    {tournament.statusCode === 'R' ? 'Đã từ chối' :
+                      tournament.statusCode === 'A' ? 'Đã được duyệt' :
+                        tournament.statusCode === 'W' ? 'Đang chờ duyệt' :
+                          tournament.statusCode}
+                  </CTableDataCell>
+                </CTableRow>
+              ))}
+          </CTableBody>
         </CTable>
       </div>
 
       <hr className="my-4" />
 
-      <ToastContainer 
+      <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
