@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem, CButton, CForm, CFormInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CFormCheck } from "@coreui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axioInstance from '../../apiInstance';
-import { toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 const TournamentList = () => {
@@ -32,7 +32,7 @@ const TournamentList = () => {
   const fetchTournaments = async () => {
     try {
       const response = await axioInstance.get('/temp-tour/list', {
-        withCredentials : true
+        withCredentials: true
       });
       console.log(response);
       if (response && response.data && Array.isArray(response.data)) {
@@ -45,8 +45,8 @@ const TournamentList = () => {
         toast.error('Đã xảy ra lỗi khi tải danh sách giải đấu. Dữ liệu không hợp lệ.');
       }
     } catch (error) {
-        console.error('Lỗi khi tải danh sách giải đấu:', error);
-        toast.error('Đã xảy ra lỗi khi tải danh sách giải đấu. Vui lòng thử lại sau.');
+      console.error('Lỗi khi tải danh sách giải đấu:', error);
+      toast.error('Đã xảy ra lỗi khi tải danh sách giải đấu. Vui lòng thử lại sau.');
     }
   };
 
@@ -54,7 +54,7 @@ const TournamentList = () => {
   useEffect(() => {
     fetchTournaments();
     const fetchUserBirds = async () => {
-      if(currentUser !== null){
+      if (currentUser !== null) {
         try {
           const response = await axioInstance.get('/bird/me', {
             withCredentials: true
@@ -105,8 +105,8 @@ const TournamentList = () => {
     const currentUser = localStorage.getItem('userId');
     const currentTime = new Date().toISOString();
     const selectedTournament = tournamentsData.find(tournament => tournament.tourId === selectedTournamentId);
-  
-    
+
+
     Swal.fire({
       title: 'Xác nhận đăng ký',
       html: `<p>Bạn chắc chắn muốn đăng ký với số lượng chiến binh: <strong>${birdNumber}</strong>?</p>`,
@@ -122,7 +122,7 @@ const TournamentList = () => {
           createdBy: currentUser,
           birdsNum: birdNumber,
         };
-  
+
         axioInstance.post('/tour-register-temp', requestData, {
           withCredentials: true,
           headers: {
@@ -141,7 +141,7 @@ const TournamentList = () => {
             const errorMessage = error?.response?.data?.errorMessage || 'Đã xảy ra lỗi khi đăng ký.';
             toast.error(errorMessage);
           });
-  
+
         setShowPopup(false);
         setSelectedBirds([]);
       }
@@ -166,7 +166,7 @@ const TournamentList = () => {
       <hr className="my-4" />
 
       <div className="table-responsive">
-      <CTable className="table-bordered rounded table-striped text-center tournament-table">
+        <CTable className="table-bordered rounded table-striped text-center tournament-table">
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">ID</CTableHeaderCell>
@@ -176,7 +176,7 @@ const TournamentList = () => {
               <CTableHeaderCell scope="col">Ngày Bắt Đầu</CTableHeaderCell>
               <CTableHeaderCell scope="col">Ngày Kết Thúc</CTableHeaderCell>
               {(
-                currentUser !== null && 
+                currentUser !== null &&
                 <CTableHeaderCell scope="col">Trạng Thái Đơn</CTableHeaderCell>
               )}
               <CTableHeaderCell scope="col">Mô Tả</CTableHeaderCell>
@@ -190,12 +190,12 @@ const TournamentList = () => {
                 <CTableDataCell>{tournament.tourName}</CTableDataCell>
                 <CTableDataCell>{tournament.startDateInfo}</CTableDataCell>
                 <CTableDataCell>{tournament.endDateInfo}</CTableDataCell>
-                {( currentUser !== null &&
-                   <CTableDataCell>
-                   {tournament.tourApplyStatusCode === 'R' ? 'Đã từ chối' : 
-                    tournament.tourApplyStatusCode === 'A' ? 'Đã được duyệt' : 
-                    tournament.tourApplyStatusCode === 'W' ? 'Đang chờ duyệt' : 
-                    tournament.tourApplyStatusCode}
+                {(currentUser !== null &&
+                  <CTableDataCell>
+                    {tournament.tourApplyStatusCode === 'R' ? 'Đã từ chối' :
+                      tournament.tourApplyStatusCode === 'A' ? 'Đã được duyệt' :
+                        tournament.tourApplyStatusCode === 'W' ? 'Đang chờ duyệt' :
+                          tournament.tourApplyStatusCode}
                   </CTableDataCell>
                 )}
                 <CTableDataCell>{tournament.memo}</CTableDataCell>
@@ -213,7 +213,7 @@ const TournamentList = () => {
                         }
                       }}>Đăng Ký</CButton>
                   )}
-                  {tournament.tourApplyStatusCode === 'W' && currentUser !== null && (
+                  {/* {tournament.tourApplyStatusCode === 'W' && currentUser !== null && (
                     <CButton
                       color="danger" onClick={() => 
                         {
@@ -246,7 +246,7 @@ const TournamentList = () => {
                           }
                         });
                       }} className='m-1 tournament-table-button'>Hủy Đơn</CButton>
-                  )}
+                  )} */}
                   {tournament.isFinished === true && (
                     <CButton className='m-11 tournament-table-button'
                       color="warning" onClick={() => {
@@ -254,15 +254,15 @@ const TournamentList = () => {
                       }}>KQ Giải Đua</CButton>
                   )}
                   {tournament.isFinished === true && (
-                  <CButton className='m-1 tournament-table-button'
+                    <CButton className='m-1 tournament-table-button'
                       color="primary" onClick={() => {
                         navigate(`/tour-stage?tourId=${tournament.tourId}`);
                       }}>KQ Chặng Đua</CButton>
-                    )}
+                  )}
                   <CButton className='m-1 tournament-table-button'
-                      color="info" onClick={() => {
-                        navigate(`/register-list?tourId=${tournament.tourId}`);
-                      }}>Danh Sách Đăng Ký</CButton>                   
+                    color="info" onClick={() => {
+                      navigate(`/register-list?tourId=${tournament.tourId}`);
+                    }}>Danh Sách Đăng Ký</CButton>
                 </CTableDataCell>
               </CTableRow>
             ))}
@@ -273,7 +273,7 @@ const TournamentList = () => {
       <hr className="my-4" />
       <div className="d-flex justify-content-center align-item-center mt-4">
         <CPagination aria-label="Page navigation example">
-          <CPaginationItem 
+          <CPaginationItem
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
@@ -305,7 +305,7 @@ const TournamentList = () => {
           <label htmlFor="">Số lượng chiến Binh</label>
           <CFormInput
             min={1}
-            max={100}  
+            max={100}
             type="number"
             placeholder="Nhập số lượng chiến binh"
             style={{ borderRadius: '0.25rem', border: '1px solid #ced4da', padding: '0.375rem 0.75rem' }}
@@ -323,17 +323,17 @@ const TournamentList = () => {
           </CButton>
         </CModalFooter>
       </CModal>
-    <ToastContainer t
-      position="top-center"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-    />
+      <ToastContainer t
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

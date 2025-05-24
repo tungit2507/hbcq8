@@ -53,6 +53,11 @@ const RegisterList = () => {
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
         <h5 className="mb-2 mb-md-0">Số căn cứ đăng ký: {registerData.length}</h5>
       </div>
+     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+        <h5 className="mb-2 mb-md-0">
+          Số chiến binh đăng ký: {registerData.reduce((total, tournament) => total + tournament.birdCodes.length, 0)}
+        </h5>
+      </div>
       <hr className="my-4" />
 
       <div className="table-responsive">
@@ -60,28 +65,32 @@ const RegisterList = () => {
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell scope="col">Mã Căn Cứ</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Tên Căn Cứ</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Tên Người Đăng Ký</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Số Lượng Chiến Binh</CTableHeaderCell>
               <CTableHeaderCell scope="col">Chiến Binh</CTableHeaderCell>
               <CTableHeaderCell scope="col">Ngày Đăng ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Trạng Thái</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {registerData.map(tournament => (
-              <CTableRow key={tournament.tourId}>
-                <CTableHeaderCell scope="row">{tournament.locationCode}</CTableHeaderCell>
-                <CTableDataCell>{tournament.requesterName}</CTableDataCell>
-                <CTableDataCell>{tournament.birdCodes.join(', ')}</CTableDataCell>
-                <CTableDataCell>{formatDate(tournament.createdAt)}</CTableDataCell>
-                   <CTableDataCell>
-                   {tournament.statusCode === 'R' ? 'Đã từ chối' : 
-                    tournament.statusCode === 'A' ? 'Đã được duyệt' : 
-                    tournament.statusCode === 'W' ? 'Đang chờ duyệt' : 
-                    tournament.statusCode}
-                  </CTableDataCell>
-              </CTableRow>
-            ))}
-          </CTableBody>
+  {registerData
+    .sort((a, b) => a.locationCode.localeCompare(b.locationCode, 'vi', { numeric: true })) // Sắp xếp theo mã căn cứ
+    .map(tournament => (
+      <CTableRow key={tournament.tourId}>
+        <CTableHeaderCell scope="row">{tournament.locationCode}</CTableHeaderCell>
+        <CTableDataCell>{tournament.requesterName}</CTableDataCell>
+        <CTableDataCell>{tournament.birdCodes.length}</CTableDataCell>
+        <CTableDataCell>{tournament.birdCodes.join(', ')}</CTableDataCell>
+        <CTableDataCell>{formatDate(tournament.createdAt)}</CTableDataCell>
+        <CTableDataCell>
+          {tournament.statusCode === 'R' ? 'Đã từ chối' : 
+           tournament.statusCode === 'A' ? 'Đã được duyệt' : 
+           tournament.statusCode === 'W' ? 'Đang chờ duyệt' : 
+           tournament.statusCode}
+        </CTableDataCell>
+      </CTableRow>
+    ))}
+  </CTableBody>
         </CTable>
       </div>
 
