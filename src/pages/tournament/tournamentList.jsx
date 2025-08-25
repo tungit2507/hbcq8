@@ -247,18 +247,18 @@ const TournamentList = () => {
                         });
                       }} className='m-1 tournament-table-button'>Hủy Đơn</CButton>
                   )} */}
-                  {tournament.isFinished === true && (
+                  {
                     <CButton className='m-11 tournament-table-button'
                       color="warning" onClick={() => {
                         navigate(`/tournament-result?id=${tournament.tourId}`);
                       }}>KQ Giải Đua</CButton>
-                  )}
-                  {tournament.isFinished === true && (
+                  }
+                  {
                     <CButton className='m-1 tournament-table-button'
                       color="primary" onClick={() => {
                         navigate(`/tour-stage?tourId=${tournament.tourId}`);
                       }}>KQ Chặng Đua</CButton>
-                  )}
+                  }
                   <CButton className='m-1 tournament-table-button'
                     color="info" onClick={() => {
                       navigate(`/register-list?tourId=${tournament.tourId}`);

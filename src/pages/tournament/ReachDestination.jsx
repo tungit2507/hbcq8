@@ -133,6 +133,7 @@ const ReachDestination = () => {
                         </CFormSelect>
                         <CFormLabel htmlFor="secretCode">Mã Bí Mật</CFormLabel>
                         <CFormInput
+                            autocomplete="off"
                             className='my-1'
                             type="text"
                             id="secretCode"
