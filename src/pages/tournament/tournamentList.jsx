@@ -179,7 +179,7 @@ const TournamentList = () => {
                 currentUser !== null &&
                 <CTableHeaderCell scope="col">Trạng Thái Đơn</CTableHeaderCell>
               )}
-              <CTableHeaderCell scope="col">Mô Tả</CTableHeaderCell>
+              {/* <CTableHeaderCell scope="col">Mô Tả</CTableHeaderCell> */}
               <CTableHeaderCell scope="col"></CTableHeaderCell>
             </CTableRow>
           </CTableHead>
@@ -198,7 +198,7 @@ const TournamentList = () => {
                           tournament.tourApplyStatusCode}
                   </CTableDataCell>
                 )}
-                <CTableDataCell>{tournament.memo}</CTableDataCell>
+                {/* <CTableDataCell>{tournament.memo}</CTableDataCell> */}
                 <CTableDataCell>
                   {(
                     currentUser !== null && tournament.tourApplyStatusCode === null &&
