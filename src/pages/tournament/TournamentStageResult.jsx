@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem } from "@coreui/react";
+import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from "@coreui/react";
 import axioInstance from '../../apiInstance';
 import { useLocation } from 'react-router-dom';
 
 const TournamentStageResults = () => {
     const [results, setResults] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [isFinished, setIsFinished] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const resultsPerPage = 10;
 
     const location = useLocation();
     const query = new URLSearchParams(location.search);
@@ -45,14 +43,6 @@ const TournamentStageResults = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, [tourId, stageId]);
 
-    const indexOfLastResult = currentPage * resultsPerPage;
-    const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-    const currentResults = results.slice(indexOfFirstResult, indexOfLastResult);
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
     return (
         <div className={`rounded ${isMobile ? '' : 'p-5'}`}>
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
@@ -81,7 +71,7 @@ const TournamentStageResults = () => {
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                        {currentResults.map(ranker => {
+                        {results.map(ranker => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
                             return (
                                 <CTableRow key={ranker.id}>
@@ -102,24 +92,6 @@ const TournamentStageResults = () => {
                         })}
                     </CTableBody>
                 </CTable>
-            </div>
-            <div className='d-flex justify-content-center mt-4'>
-                <CPagination>
-                    <CPaginationItem
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        Trước
-                    </CPaginationItem>
-                    {Array.from({ length: Math.ceil(results.length / resultsPerPage) }, (_, i) => (
-                        <CPaginationItem key={i} onClick={() => handlePageChange(i + 1)}>
-                            {i + 1}
-                        </CPaginationItem>
-                    ))}
-                    <CPaginationItem onClick={() => handlePageChange(currentPage + 1)}>
-                        Sau
-                    </CPaginationItem>
-                </CPagination>
             </div>
         </div>
     );
