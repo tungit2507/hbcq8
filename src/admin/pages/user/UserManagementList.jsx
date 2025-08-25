@@ -42,8 +42,12 @@ const UserManagementList = () => {
       user.phone.includes(searchQuery)
     );
     setFilteredUsers(filtered);
-    setCurrentPage(1);
-  }, [searchQuery, users]);
+    // Chỉ reset về page 1 khi searchQuery thay đổi, không reset khi users thay đổi
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(currentPage);
+  }, [currentPage]);
 
   const indexOfLastUser = currentPageState * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
