@@ -293,37 +293,39 @@ const TourAcceptResult = () => {
                     </CTableHead>
                     <CTableBody>
                         {tourStageResults.length > 0 ? (
-                            tourStageResults.map((tourStageResult, index) => (
-                                <CTableRow key={index}>
-                                    <CTableDataCell>
-                                        <CFormCheck
-                                            checked={selectedBirds.includes(tourStageResult.birdCode)}
-                                            onChange={() => handleSelectBird(tourStageResult.birdCode)}
-                                        />
-                                    </CTableDataCell>
-                                    <CTableDataCell>{tourStageResult.birdCode}</CTableDataCell>
-                                    <CTableDataCell>{tourStageResult.startPointCode}</CTableDataCell>
-                                    <CTableDataCell>{tourStageResult.startTime}</CTableDataCell>
-                                    <CTableDataCell>{tourStageResult.endPointCode}</CTableDataCell>
-                                    <CTableDataCell>{tourStageResult.endTime}</CTableDataCell>
-                                    <CTableDataCell>{tourStageResult.pointKey}</CTableDataCell>
-                                    <CTableDataCell>
-                                        {tourStageResult.status === 'W' ? 'Đang đợi phê duyệt' : tourStageResult.status === 'A' ? 'Đã xác nhận' : tourStageResult.status === 'R' ? 'Đã từ chối' : 'Chưa có kết quả'}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                        {
-                                            tourStageResult.status === 'W' ? (
-                                                <>
-                                                    <CButton color="success" className='m-1' onClick={() => handleConfirm(tourStageResult.birdCode)}>Xác nhận</CButton>
-                                                    <CButton color="danger" className="m-1" onClick={() => handleReject(tourStageResult.birdCode)}>Từ chối</CButton>
-                                                </>
-                                            ) : (
-                                                <CButton color="danger" onClick={() => handleCancelStageResult(tourStageResult.birdCode)}>Hủy</CButton>
-                                            )
-                                        }
-                                    </CTableDataCell>
-                                </CTableRow>
-                            ))
+                            [...tourStageResults]
+                                .sort((a, b) => a.endPointCode.localeCompare(b.endPointCode))
+                                .map((tourStageResult, index) => (
+                                    <CTableRow key={index}>
+                                        <CTableDataCell>
+                                            <CFormCheck
+                                                checked={selectedBirds.includes(tourStageResult.birdCode)}
+                                                onChange={() => handleSelectBird(tourStageResult.birdCode)}
+                                            />
+                                        </CTableDataCell>
+                                        <CTableDataCell>{tourStageResult.birdCode}</CTableDataCell>
+                                        <CTableDataCell>{tourStageResult.startPointCode}</CTableDataCell>
+                                        <CTableDataCell>{tourStageResult.startTime}</CTableDataCell>
+                                        <CTableDataCell>{tourStageResult.endPointCode}</CTableDataCell>
+                                        <CTableDataCell>{tourStageResult.endTime}</CTableDataCell>
+                                        <CTableDataCell>{tourStageResult.pointKey}</CTableDataCell>
+                                        <CTableDataCell>
+                                            {tourStageResult.status === 'W' ? 'Đang đợi phê duyệt' : tourStageResult.status === 'A' ? 'Đã xác nhận' : tourStageResult.status === 'R' ? 'Đã từ chối' : 'Chưa có kết quả'}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {
+                                                tourStageResult.status === 'W' ? (
+                                                    <>
+                                                        <CButton color="success" className='m-1' onClick={() => handleConfirm(tourStageResult.birdCode)}>Xác nhận</CButton>
+                                                        <CButton color="danger" className="m-1" onClick={() => handleReject(tourStageResult.birdCode)}>Từ chối</CButton>
+                                                    </>
+                                                ) : (
+                                                    <CButton color="danger" onClick={() => handleCancelStageResult(tourStageResult.birdCode)}>Hủy</CButton>
+                                                )
+                                            }
+                                        </CTableDataCell>
+                                    </CTableRow>
+                                ))
                         ) : (
                             <CTableRow>
                                 <CTableDataCell colSpan="9">Không có kết quả nào</CTableDataCell>
