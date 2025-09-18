@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem } from "@coreui/react";
+import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from "@coreui/react";
 import axioInstance from '../../apiInstance';
 import { useLocation } from 'react-router-dom';
 
 const TournamentResults = () => {
     const [results, setResults] = useState([]);
     const [tourName, setTourName] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const resultsPerPage = 10;
 
     const location = useLocation();
     const query = new URLSearchParams(location.search);
@@ -27,7 +25,7 @@ const TournamentResults = () => {
         const fetchTourInfo = async () => {
             try {
                 const response = await axioInstance.get(`/temp-tour/name?tourId=${tourId}`);
-                setTourName(response.data); // Cập nhật tourName bằng setTourName
+                setTourName(response.data);
             } catch (error) {
                 console.error('Error fetching tournament info:', error);
             }
@@ -44,39 +42,55 @@ const TournamentResults = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, [tourId]);
 
-    const indexOfLastResult = currentPage * resultsPerPage;
-    const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-    const currentResults = results.slice(indexOfFirstResult, indexOfLastResult);
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
     return (
-        <div className={`rounded ${isMobile ? '' : 'p-5'}`}>
+        <div
+            className="rounded"
+            style={{
+                width: '100vw',
+                minHeight: '100vh',
+                padding: 0
+            }}
+        >
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                 <h3 className="mb-2 mb-md-0 text-center">
-                    <label htmlFor="" className=''>Kết Quả Giải Đua : </label>
-                    <label htmlFor="" className='mx-2'>{tourName}</label>
+                    <label>Kết Quả Giải Đua :</label>
+                    <label className='mx-2'>{tourName}</label>
                 </h3>
             </div>
             <hr className="my-4" />
-            <div>
-                <CTable className="table-bordered rounded table-striped text-center tournament-table">
+            <div
+                className="table-responsive"
+                style={{
+                    width: '100vw',
+                    maxWidth: '100vw',
+                    overflowX: 'hidden',
+                    margin: 0,
+                    padding: 0
+                }}
+            >
+                <CTable
+                    className="table-bordered rounded table-striped text-center tournament-table"
+                    style={{
+                        fontSize: isMobile ? '0.75rem' : '1rem',
+                        width: '100vw',
+                        tableLayout: 'fixed',
+                        wordBreak: 'break-word'
+                    }}
+                >
                     <CTableHead>
                         <CTableRow>
-                            <CTableHeaderCell scope="col">Hạng</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Mã CC</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Căn Cứ</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Mã Kiềng</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Kinh Độ</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Vĩ Độ</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Khoảng Cách</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Vận Tốc</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Hạng</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Mã CC</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Căn Cứ</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Mã Kiềng</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Kinh Độ</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Vĩ Độ</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Khoảng Cách</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Vận Tốc</CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                        {currentResults.map(ranker => {
+                        {results.map(ranker => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
                             return (
                                 <CTableRow key={ranker.id}>
@@ -94,15 +108,6 @@ const TournamentResults = () => {
                     </CTableBody>
                 </CTable>
             </div>
-            <CPagination className="justify-content-center mt-4">
-                <CPaginationItem disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>Previous</CPaginationItem>
-                {[...Array(Math.ceil(results.length / resultsPerPage)).keys()].map(number => (
-                    <CPaginationItem key={number + 1} active={number + 1 === currentPage} onClick={() => handlePageChange(number + 1)}>
-                        {number + 1}
-                    </CPaginationItem>
-                ))}
-                <CPaginationItem disabled={currentPage === Math.ceil(results.length / resultsPerPage)} onClick={() => handlePageChange(currentPage + 1)}>Next</CPaginationItem>
-            </CPagination>
         </div>
     );
 };
