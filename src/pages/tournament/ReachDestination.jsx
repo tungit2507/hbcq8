@@ -15,7 +15,7 @@ const ReachDestination = () => {
     const [birdCodes, setBirdCodes] = useState([]);
     const [tourStages, setTourStages] = useState([]);
     const [tourStageReport, setTourStageReport] = useState('');
-    const [reportImage, setReportImage] = useState(null); 
+    const [reportImage, setReportImage] = useState(null);
 
     const handleAddReport = () => {
         if (!report.birdCode || !report.secretCode) {
@@ -44,7 +44,7 @@ const ReachDestination = () => {
                     .then(async (response) => {
                         const file = new Blob([response.data], { type: 'application/pdf' });
                         const image = await convertPdfToImages(file); // Convert PDF to image
-                        setReportImage(image); 
+                        setReportImage(image);
                     })
                     .catch(error => {
                         if (error?.response?.status === 408) {
@@ -137,9 +137,15 @@ const ReachDestination = () => {
                             className='my-1'
                             type="text"
                             id="secretCode"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             placeholder="Nhập Mã Bí Mật"
                             value={report.secretCode}
-                            onChange={(e) => setReport({ ...report, secretCode: e.target.value })}
+                            onChange={(e) => {
+                                // Chỉ cho nhập số
+                                const value = e.target.value.replace(/\D/g, '');
+                                setReport({ ...report, secretCode: value });
+                            }}
                         />
                     </CForm>
                 </CModalBody>
@@ -152,7 +158,7 @@ const ReachDestination = () => {
             {reportImage && (
                 <div className="mt-4 text-center">
                     <h5>Hình Ảnh Báo Cáo</h5>
-                    <img className='report-image' src={reportImage} alt="Report"/>
+                    <img className='report-image' src={reportImage} alt="Report" />
                 </div>
             )}
 
