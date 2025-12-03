@@ -87,6 +87,7 @@ const TournamentResults = () => {
                             <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Vĩ Độ</CTableHeaderCell>
                             <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Khoảng Cách</CTableHeaderCell>
                             <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Vận Tốc</CTableHeaderCell>
+                            <CTableHeaderCell scope="col" style={{ whiteSpace: 'normal' }}>Tổng Thời Gian</CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -98,6 +99,9 @@ const TournamentResults = () => {
                             else if (rank === 2) cellStyle = { backgroundColor: '#ffc107', color: '#212529' }; // vàng
                             else if ([3, 4, 5].includes(rank)) cellStyle = { backgroundColor: '#0dcaf0', color: '#212529' }; // xanh
 
+                            // Dữ liệu giả tổng thời gian
+                            const fakeTotalTime = "01:23:45";
+
                             return (
                                 <CTableRow key={ranker.id}>
                                     <CTableHeaderCell scope="row" style={cellStyle}>{ranker.rank}</CTableHeaderCell>
@@ -108,6 +112,7 @@ const TournamentResults = () => {
                                     <CTableDataCell style={cellStyle}>{latitude}</CTableDataCell>
                                     <CTableDataCell style={cellStyle}>{ranker.distance.toFixed(6)}</CTableDataCell>
                                     <CTableDataCell style={cellStyle}>{ranker.speed.toFixed(6)}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{fakeTotalTime}</CTableDataCell>
                                 </CTableRow>
                             );
                         })}
