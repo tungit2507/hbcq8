@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem } from "@coreui/react";
 import axiosInstance from '../../api/api';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const TournamentStageResults = () => {
   const [results, setResults] = useState([]);
@@ -10,6 +10,7 @@ const TournamentStageResults = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const resultsPerPage = 10;
 
+  const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const tourId = query.get('tourId');
@@ -45,12 +46,22 @@ const TournamentStageResults = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [tourId, stageId]);
 
+  useEffect(() => {
+    // Lấy page từ URL, nếu không có thì mặc định là 1
+    const params = new URLSearchParams(location.search);
+    const pageFromUrl = parseInt(params.get('page'), 10) || 1;
+    setCurrentPage(pageFromUrl);
+  }, [location.search]);
+
   const indexOfLastResult = currentPage * resultsPerPage;
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
   const currentResults = results.slice(indexOfFirstResult, indexOfLastResult);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    const params = new URLSearchParams(location.search);
+    params.set('page', pageNumber);
+    navigate(`${location.pathname}?${params.toString()}`);
   };
 
   const parseCoordinates = (coordinates) => {
@@ -88,20 +99,26 @@ const TournamentStageResults = () => {
           <CTableBody>
             {currentResults.map(ranker => {
               const { latitude, longitude } = parseCoordinates(ranker.userLocationCoor);
+              const rank = Number(ranker.rank);
+              let cellStyle = {};
+              if (rank === 1) cellStyle = { backgroundColor: '#dc3545', color: '#fff' }; // đỏ
+              else if (rank === 2) cellStyle = { backgroundColor: '#ffc107', color: '#212529' }; // vàng
+              else if ([3, 4, 5].includes(rank)) cellStyle = { backgroundColor: '#0dcaf0', color: '#212529' }; // xanh
+
               return (
                 <CTableRow key={ranker.id}>
-                  <CTableHeaderCell scope="row">{ranker.rank}</CTableHeaderCell>
-                  <CTableDataCell>{ranker.userLocationCode}</CTableDataCell>
-                  <CTableDataCell>{ranker.userLocationName}</CTableDataCell>
-                  <CTableDataCell>{ranker.birdCode}</CTableDataCell>
-                  <CTableDataCell>{longitude}</CTableDataCell>
-                  <CTableDataCell>{latitude}</CTableDataCell>
-                  <CTableDataCell>{ranker.distance}</CTableDataCell>
-                  <CTableDataCell>{ranker.endTime}</CTableDataCell>
-                  <CTableDataCell>{ranker.startTime}</CTableDataCell>
-                  <CTableDataCell>{ranker.totalTime}</CTableDataCell>
-                  <CTableDataCell>{ranker.speed}</CTableDataCell>
-                  <CTableDataCell>{ranker.pointKey}</CTableDataCell>
+                  <CTableHeaderCell scope="row" style={cellStyle}>{ranker.rank}</CTableHeaderCell>
+                  <CTableDataCell style={cellStyle}>{ranker.userLocationCode}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.userLocationName}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.birdCode}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{longitude}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{latitude}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.distance}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.endTime}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.startTime}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.totalTime}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.speed}</CTableDataCell>
+                  <CTableDataCell style={cellStyle}>{ranker.pointKey}</CTableDataCell>
                 </CTableRow>
               );
             })}
@@ -117,11 +134,18 @@ const TournamentStageResults = () => {
             Trước
           </CPaginationItem>
           {Array.from({ length: Math.ceil(results.length / resultsPerPage) }, (_, i) => (
-            <CPaginationItem key={i} onClick={() => handlePageChange(i + 1)}>
+            <CPaginationItem
+              key={i}
+              active={currentPage === i + 1}
+              onClick={() => handlePageChange(i + 1)}
+            >
               {i + 1}
             </CPaginationItem>
           ))}
-          <CPaginationItem onClick={() => handlePageChange(currentPage + 1)}>
+          <CPaginationItem
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === Math.ceil(results.length / resultsPerPage)}
+          >
             Sau
           </CPaginationItem>
         </CPagination>
