@@ -11,50 +11,49 @@ const ReachDestination = () => {
     const query = new URLSearchParams(location.search);
     const tourId = query.get('tourId');
     const [showReportModal, setShowReportModal] = useState(false);
-    const [report, setReport] = useState({ birdCode: '', secretCode: '', tourCode: '' });
+    const [report, setReport] = useState({ birdCode: [], secretCode: '', tourCode: '' });
     const [birdCodes, setBirdCodes] = useState([]);
     const [tourStages, setTourStages] = useState([]);
     const [tourStageReport, setTourStageReport] = useState('');
     const [reportImage, setReportImage] = useState(null);
 
-    const handleAddReport = () => {
-        if (!report.birdCode || !report.secretCode) {
+    const handleAddReport = async () => {
+        if (!report.birdCode.length || !report.secretCode) {
             toast.error('Vui lòng nhập đầy đủ thông tin.');
             return;
         }
 
         Swal.fire({
             title: 'Xác Nhận Báo Cáo',
-            html: `Vui Lòng Xác Nhận Trước Khi Báo Cáo<p>${tourStageReport.endPointCode} ${report.birdCode} ${report.secretCode}</p>`,
+            html: `Vui Lòng Xác Nhận Trước Khi Báo Cáo<p>${tourStageReport.endPointCode} ${report.birdCode.join(', ')} ${report.secretCode}</p>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: 'Hủy'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                const formData = {
-                    tourId: tourId,
-                    requesterId: currentUser.id,
-                    birdCode: report.birdCode,
-                    pointKey: report.secretCode,
-                    stageId: tourStageReport.stageId
-                };
-                axiosInstance.post('/tour/submit', formData, { responseType: 'blob' })
-                    .then(async (response) => {
+                for (const birdCode of report.birdCode) {
+                    const formData = {
+                        tourId: tourId,
+                        requesterId: currentUser.id,
+                        birdCode: birdCode,
+                        pointKey: report.secretCode,
+                        stageId: tourStageReport.stageId
+                    };
+                    try {
+                        const response = await axiosInstance.post('/tour/submit', formData, { responseType: 'blob' });
                         const file = new Blob([response.data], { type: 'application/pdf' });
-                        const image = await convertPdfToImages(file); // Convert PDF to image
+                        const image = await convertPdfToImages(file);
                         setReportImage(image);
-                    })
-                    .catch(error => {
+                    } catch (error) {
                         if (error?.response?.status === 408) {
-                            const errorMessage = "Quá thời hạn chỉnh sửa lại";
-                            toast.error(errorMessage, error);
+                            toast.error("Quá thời hạn chỉnh sửa lại", error);
                         } else {
-                            const errorMessage = "Báo cáo không thành công";
-                            toast.error(errorMessage, error);
+                            toast.error("Báo cáo không thành công", error);
                         }
-                    });
+                    }
+                }
             }
         });
 
@@ -121,16 +120,37 @@ const ReachDestination = () => {
                 <CModalBody>
                     <CForm>
                         <CFormLabel htmlFor="birdCode">Chọn mã kiềng</CFormLabel>
-                        <CFormSelect
-                            id="birdCode"
-                            value={report.birdCode}
-                            onChange={(e) => setReport({ ...report, birdCode: e.target.value })}
-                        >
-                            <option value="" disabled>Chọn mã kiềng</option>
-                            {birds.map((birdCode, index) => (
-                                <option key={index} value={birdCode}>{birdCode}</option>
-                            ))}
-                        </CFormSelect>
+                        <div className="d-flex flex-wrap gap-2">
+                            {birds.map((birdCode, index) => {
+                                const checked = report.birdCode.includes(birdCode);
+                                return (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            borderRadius: 4,
+                                            padding: '4px 8px',
+                                            display: 'flex',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id={`birdCode_${birdCode}`}
+                                            checked={checked}
+                                            onChange={() => {
+                                                setReport(prev => {
+                                                    const birdCodeArr = prev.birdCode.includes(birdCode)
+                                                        ? prev.birdCode.filter(code => code !== birdCode)
+                                                        : [...prev.birdCode, birdCode];
+                                                    return { ...prev, birdCode: birdCodeArr };
+                                                });
+                                            }}
+                                        />
+                                        <label htmlFor={`birdCode_${birdCode}`} style={{ marginLeft: 8 }}>{birdCode}</label>
+                                    </div>
+                                );
+                            })}
+                        </div>
                         <CFormLabel htmlFor="secretCode">Mã Bí Mật</CFormLabel>
                         <CFormInput
                             autocomplete="off"
