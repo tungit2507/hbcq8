@@ -37,12 +37,11 @@ const UserManagementList = () => {
 
   useEffect(() => {
     const filtered = users.filter(user =>
-      user.username.includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.phone.includes(searchQuery)
+      (user.username || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (user.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (user.phone || '').includes(searchQuery)
     );
     setFilteredUsers(filtered);
-    // Chỉ reset về page 1 khi searchQuery thay đổi, không reset khi users thay đổi
   }, [searchQuery]);
 
   useEffect(() => {
@@ -121,7 +120,7 @@ const UserManagementList = () => {
 
   const handlePasswordChange = async () => {
 
-    if(password === '' || confirmPassword === '') {
+    if (password === '' || confirmPassword === '') {
       showErrorNotification("Mật khẩu không được để trống.");
       return;
     }
@@ -196,7 +195,7 @@ const UserManagementList = () => {
       <hr className="my-4" />
       <div className="d-flex justify-content-center mt-4">
         <CPagination aria-label="Page navigation example">
-          <CPaginationItem 
+          <CPaginationItem
             onClick={() => handlePageChange(currentPageState - 1)}
             disabled={currentPageState === 1}
           >
