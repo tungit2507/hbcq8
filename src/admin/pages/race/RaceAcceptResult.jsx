@@ -264,7 +264,7 @@ const TourAcceptResult = () => {
                     <CButton className='m-1' color="success" onClick={handleConfirmAll} disabled={selectedBirds.length === 0}>Xác nhận tất cả</CButton>
                     <CButton className='m-1' color="danger" onClick={handleRejectAll} disabled={selectedBirds.length === 0}>Từ chối tất cả</CButton>
                 </div>
-                
+
             </div>
             <div className="d-flex justify-content-between align-items-center">
                 <CFormSelect className='m-1 w-auto' onChange={(e) => handleOnChangeSelectStage(e.target.value)}>
@@ -273,7 +273,7 @@ const TourAcceptResult = () => {
                     ))}
                 </CFormSelect>
                 <div >
-                <CButton className='m-1' color="warning" as={Link} to={`/admin/management/race/stage/result?tourId=${tourId}&stageId=${selectedStage}`}>Bảng Xếp Hạng</CButton>                    <CButton className='m-1' color="danger" onClick={handleClickEndStage} hidden={selectedStageStatus}>Kết Thúc Chặng Đua</CButton>
+                    <CButton className='m-1' color="warning" as={Link} to={`/admin/management/race/stage/result?tourId=${tourId}&stageId=${selectedStage}`}>Bảng Xếp Hạng</CButton>                    <CButton className='m-1' color="danger" onClick={handleClickEndStage} hidden={selectedStageStatus}>Kết Thúc Chặng Đua</CButton>
                 </div>
             </div>
             <div className="table-responsive">
@@ -294,7 +294,7 @@ const TourAcceptResult = () => {
                     <CTableBody>
                         {tourStageResults.length > 0 ? (
                             [...tourStageResults]
-                                .sort((a, b) => a.endPointCode.localeCompare(b.endPointCode))
+                                .sort((a, b) => a.birdCode.localeCompare(b.birdCode)) // Sắp xếp theo mã kiềng
                                 .map((tourStageResult, index) => (
                                     <CTableRow key={index}>
                                         <CTableDataCell>
@@ -333,7 +333,7 @@ const TourAcceptResult = () => {
                         )}
                     </CTableBody>
                 </CTable>
-               
+
             </div>
         </div>
     );
