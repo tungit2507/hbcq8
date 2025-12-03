@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CPagination, CPaginationItem, CButton, CForm, CFormInput, CFormCheck } from '@coreui/react';
 import Swal from 'sweetalert2';
 import { approveRaceRegistration, fetchRaceRegistrationByRaceId, rejectRaceRegistration } from '../../api/raceRegistration';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const RaceRegistrationList = () => {
@@ -12,6 +12,7 @@ const RaceRegistrationList = () => {
   const [selectedRegistrations, setSelectedRegistrations] = useState([]);
   const [registrations, setRegistrations] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
   const raceId = new URLSearchParams(window.location.search).get('id');
 
 
@@ -25,6 +26,13 @@ const RaceRegistrationList = () => {
       });
     setCurrentPage(1);
   }, [searchTerm]);
+
+  useEffect(() => {
+    // Lấy page từ URL, nếu không có thì mặc định là 1
+    const params = new URLSearchParams(location.search);
+    const pageFromUrl = parseInt(params.get('page'), 10) || 1;
+    setCurrentPage(pageFromUrl);
+  }, [location.search]);
 
   const handleSelect = (requesterId) => {
     setSelectedRegistrations((prevSelected) =>
@@ -43,7 +51,12 @@ const RaceRegistrationList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = registrations?.slice(indexOfFirstItem, indexOfLastItem) || [];
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    const params = new URLSearchParams(location.search);
+    params.set('page', pageNumber);
+    navigate(`${location.pathname}?${params.toString()}`);
+  };
 
   // const handleApprove = (requesterId) => {
   //   const raceId = new URLSearchParams(window.location.search).get('id');
@@ -164,7 +177,7 @@ const RaceRegistrationList = () => {
               <CTableHeaderCell scope="col">Tên Người Đăng Ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Số CB Dự Kiến</CTableHeaderCell>
               <CTableHeaderCell scope="col">Mã Kiềng</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Khoảng Cách</CTableHeaderCell> {/* Thêm cột mới */}
+              {/* <CTableHeaderCell scope="col">Khoảng Cách</CTableHeaderCell> Thêm cột mới */}
               <CTableHeaderCell scope="col">Ngày Đăng Ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Trạng Thái</CTableHeaderCell>
               <CTableHeaderCell scope="col">Người Phê Duyệt</CTableHeaderCell>
@@ -184,10 +197,9 @@ const RaceRegistrationList = () => {
                     ? registration.birdCodes.join(', ') // Join bird codes with commas
                     : "Không có mã kiềng"}
                 </CTableDataCell>
-                <CTableDataCell>
-                  {/* Dữ liệu giả khoảng cách */}
+                {/* <CTableDataCell>
                   123.456 km
-                </CTableDataCell>
+                </CTableDataCell> */}
                 <CTableDataCell>{new Date(registration.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</CTableDataCell>
                 <CTableDataCell>
                   {registration.statusCode === 'W' && "Đang Chờ Duyệt"}
