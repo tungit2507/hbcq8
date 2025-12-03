@@ -92,16 +92,22 @@ const TournamentResults = () => {
                     <CTableBody>
                         {results.map(ranker => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
+                            const rank = Number(ranker.rank);
+                            let cellStyle = {};
+                            if (rank === 1) cellStyle = { backgroundColor: '#dc3545', color: '#fff' }; // đỏ
+                            else if (rank === 2) cellStyle = { backgroundColor: '#ffc107', color: '#212529' }; // vàng
+                            else if ([3, 4, 5].includes(rank)) cellStyle = { backgroundColor: '#0dcaf0', color: '#212529' }; // xanh
+
                             return (
                                 <CTableRow key={ranker.id}>
-                                    <CTableHeaderCell scope="row">{ranker.rank}</CTableHeaderCell>
-                                    <CTableDataCell>{ranker.userLocationCode}</CTableDataCell>
-                                    <CTableDataCell>{ranker.userLocationName}</CTableDataCell>
-                                    <CTableDataCell>{ranker.birdCode}</CTableDataCell>
-                                    <CTableDataCell>{longitude}</CTableDataCell>
-                                    <CTableDataCell>{latitude}</CTableDataCell>
-                                    <CTableDataCell>{ranker.distance.toFixed(6)}</CTableDataCell>
-                                    <CTableDataCell>{ranker.speed.toFixed(6)}</CTableDataCell>
+                                    <CTableHeaderCell scope="row" style={cellStyle}>{ranker.rank}</CTableHeaderCell>
+                                    <CTableDataCell style={cellStyle}>{ranker.userLocationCode}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{ranker.userLocationName}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{ranker.birdCode}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{longitude}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{latitude}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{ranker.distance.toFixed(6)}</CTableDataCell>
+                                    <CTableDataCell style={cellStyle}>{ranker.speed.toFixed(6)}</CTableDataCell>
                                 </CTableRow>
                             );
                         })}
