@@ -93,14 +93,14 @@ const RaceRegistrationList = () => {
           showCancelButton: true,
           confirmButtonText: 'Gửi',
           cancelButtonText: 'Hủy',
-        }).then( async (reasonResult) => {
+        }).then(async (reasonResult) => {
           try {
             if (reasonResult.isConfirmed) {
               const formData = new FormData();
               const currentUser = JSON.parse(localStorage.getItem("currentUser"))
               formData.append('tourId', raceId);
               formData.append('requesterId', requesterId);
-              formData.append('approverId', currentUser.id); 
+              formData.append('approverId', currentUser.id);
               formData.append('memo', reasonResult.value);
               const response = await rejectRaceRegistration(formData)
               Swal.fire('Đã từ chối!', 'Đăng ký đã bị từ chối.', 'success');
@@ -127,7 +127,7 @@ const RaceRegistrationList = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        const approvedRegistrations = registrations.filter(registration => 
+        const approvedRegistrations = registrations.filter(registration =>
           selectedRegistrations.includes(registration.requesterId)
         );
 
@@ -135,7 +135,7 @@ const RaceRegistrationList = () => {
           const formData = new FormData();
           formData.append('tourId', raceId);
           formData.append('requesterId', registration.requesterId);
-          formData.append('approverId', currentUser.id); 
+          formData.append('approverId', currentUser.id);
           formData.append('statusCode', 'A');
           formData.append('memo', '');
           await approveRaceRegistration(formData);
@@ -163,8 +163,8 @@ const RaceRegistrationList = () => {
             <CTableRow>
               <CTableHeaderCell scope="col">Tên Người Đăng Ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Số CB Dự Kiến</CTableHeaderCell>
-              
               <CTableHeaderCell scope="col">Mã Kiềng</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Khoảng Cách</CTableHeaderCell> {/* Thêm cột mới */}
               <CTableHeaderCell scope="col">Ngày Đăng Ký</CTableHeaderCell>
               <CTableHeaderCell scope="col">Trạng Thái</CTableHeaderCell>
               <CTableHeaderCell scope="col">Người Phê Duyệt</CTableHeaderCell>
@@ -177,13 +177,17 @@ const RaceRegistrationList = () => {
               <CTableRow key={registration.tourid}>
                 <CTableDataCell>{registration.requesterName}</CTableDataCell>
                 <CTableDataCell>
-                  {registration.birdsNum? registration.birdsNum : "Không thể hiển thị"}
+                  {registration.birdsNum ? registration.birdsNum : "Không thể hiển thị"}
                 </CTableDataCell>
                 <CTableDataCell>
                   {Array.isArray(registration.birdCodes) && registration.birdCodes.length > 0
                     ? registration.birdCodes.join(', ') // Join bird codes with commas
                     : "Không có mã kiềng"}
-                </CTableDataCell>                
+                </CTableDataCell>
+                <CTableDataCell>
+                  {/* Dữ liệu giả khoảng cách */}
+                  123.456 km
+                </CTableDataCell>
                 <CTableDataCell>{new Date(registration.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</CTableDataCell>
                 <CTableDataCell>
                   {registration.statusCode === 'W' && "Đang Chờ Duyệt"}
@@ -194,7 +198,7 @@ const RaceRegistrationList = () => {
                 <CTableDataCell>{registration.approverName}</CTableDataCell>
                 <CTableDataCell>{registration.memo}</CTableDataCell>
                 <CTableDataCell>
-                  {registration.statusCode  === 'W' && (
+                  {registration.statusCode === 'W' && (
                     <>
                       <Link to={`/admin/management/race/registration-list/approve?requesterId=${registration.requesterId}&tourId=${raceId}`} className="btn btn-success me-2 mb-2 mb-md-0 btn-sm">Duyệt</Link>
                       <CButton color="danger" onClick={() => handleReject(registration.requesterId)}
@@ -214,7 +218,7 @@ const RaceRegistrationList = () => {
       <hr />
       <div className="d-flex justify-content-center mt-4">
         <CPagination aria-label="Điều hướng trang">
-          <CPaginationItem 
+          <CPaginationItem
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}
           >
@@ -237,7 +241,7 @@ const RaceRegistrationList = () => {
           </CPaginationItem>
         </CPagination>
       </div>
-      
+
     </div>
   );
 };
