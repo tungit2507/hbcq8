@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from "@coreui/react";
+import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CFormInput } from "@coreui/react";
 import axioInstance from '../../apiInstance';
 import { useLocation } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ const TournamentStageResults = () => {
     const [results, setResults] = useState([]);
     const [isFinished, setIsFinished] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [searchLocationCode, setSearchLocationCode] = useState("");
 
     const location = useLocation();
     const query = new URLSearchParams(location.search);
@@ -43,13 +44,31 @@ const TournamentStageResults = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, [tourId, stageId]);
 
+    // Lọc kết quả theo mã căn cứ
+    const filteredResults = results.filter(ranker =>
+        ranker.userLocationCode?.toLowerCase().includes(searchLocationCode.toLowerCase())
+    );
+
     return (
-        <div className={`rounded ${isMobile ? '' : 'p-5'}`}>
+        <div className={`rounded ${isMobile ? 'px-2' : 'p-5'}`}>
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
                 <h3 className="mb-2 mb-md-0 text-center">
                     <label htmlFor="" className=''>Kết Quả Chặng Đua</label>
                     <label htmlFor="" className='mx-2' style={{ color: "red" }}>{isFinished ? "Chính Thức" : "Tạm Thời"}</label>
                 </h3>
+            </div>
+            <div className="d-flex justify-content-end mb-3">
+                <CFormInput
+                    style={{
+                        width: !isMobile ? "30vw" : undefined
+                    }}
+                    type="text"
+                    placeholder="Tìm kiếm theo mã căn cứ..."
+                    value={searchLocationCode}
+                    onChange={e => {
+                        setSearchLocationCode(e.target.value);
+                    }}
+                />
             </div>
             <hr className="my-4" />
             <div>
@@ -71,7 +90,7 @@ const TournamentStageResults = () => {
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                        {results.map(ranker => {
+                        {filteredResults.map(ranker => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
                             return (
                                 <CTableRow key={ranker.id}>
