@@ -94,9 +94,9 @@ const TournamentStageResults = () => {
                             const [longitude, latitude] = ranker.userLocationCoor.split(';');
                             const rank = Number(ranker.rank);
                             let cellStyle = {};
-                            if (rank === 1) cellStyle = { backgroundColor: '#dc3545', color: '#fff' }; // đỏ
-                            else if (rank === 2) cellStyle = { backgroundColor: '#ffc107', color: '#212529' }; // vàng
-                            else if ([3, 4, 5].includes(rank)) cellStyle = { backgroundColor: '#0dcaf0', color: '#212529' }; // xanh
+                            if (rank === 1) cellStyle = { backgroundColor: '#ffb0b0', color: '#000000' }; // đỏ
+                            else if (rank === 2) cellStyle = { backgroundColor: '#fff7d1', color: '#000000' }; // vàng
+                            else if ([3, 4, 5].includes(rank)) cellStyle = { backgroundColor: '#e7fbe6', color: '#212529' }; // xanh
 
                             return (
                                 <CTableRow key={ranker.id}>
