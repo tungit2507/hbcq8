@@ -238,7 +238,7 @@ const TournamentList = () => {
                         } else {
                           navigate('/login');
                         }
-                      }}>Chỉnh Sửa SL Chiến Binh</CButton>
+                      }}>Cập Nhật Chiến Binh</CButton>
                   )}
                   {/* {tournament.tourApplyStatusCode === 'W' && currentUser !== null && (
                     <CButton
