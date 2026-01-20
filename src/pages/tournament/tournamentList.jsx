@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axioInstance from '../../apiInstance';
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { updateTournamentRegistration } from '../../admin/api/tournamentApi';
 
 const TournamentList = () => {
   const [tournamentsData, setTournamentsData] = useState([]);
@@ -19,6 +20,7 @@ const TournamentList = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTournamentId, setSelectedTournamentId] = useState(null);
   const [selectedBirds, setSelectedBirds] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
   const tournamentsPerPage = 10;
 
   const indexOfLastTournament = currentPage * tournamentsPerPage;
@@ -88,6 +90,14 @@ const TournamentList = () => {
 
   const handleOpenPopup = (tournamentId) => {
     setSelectedTournamentId(tournamentId);
+    const selectedTournament = tournamentsData.find(tournament => tournament.tourId === tournamentId);
+    // Check if it's an edit mode (user already registered)
+    if (selectedTournament && selectedTournament.tourApplyStatusCode !== null) {
+      setIsEditMode(true);
+    } else {
+      setIsEditMode(false);
+      setBirdNumber(1);
+    }
     setShowPopup(true);
   };
 
@@ -106,44 +116,48 @@ const TournamentList = () => {
     const currentTime = new Date().toISOString();
     const selectedTournament = tournamentsData.find(tournament => tournament.tourId === selectedTournamentId);
 
-
     Swal.fire({
-      title: 'Xác nhận đăng ký',
-      html: `<p>Bạn chắc chắn muốn đăng ký với số lượng chiến binh: <strong>${birdNumber}</strong>?</p>`,
+      title: 'Xác nhận',
+      html: `<p>Bạn chắc chắn muốn ${isEditMode ? 'cập nhật' : 'đăng ký'} với số lượng chiến binh: <strong>${birdNumber}</strong>?</p>`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Xác nhận',
       cancelButtonText: 'Hủy',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         const requestData = {
           tourId: selectedTournamentId,
           requesterId: currentUser,
-          createdBy: currentUser,
-          birdsNum: birdNumber,
+          birdsNum: parseInt(birdNumber),
         };
 
-        axioInstance.post('/tour-register-temp', requestData, {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((response) => {
-            console.log('Đăng ký giải đấu thành công:', response.data);
-            toast.success('Đăng ký giải đấu thành công!');
-            setTimeout(() => {
-              fetchTournaments();
-            }, 1000);
-          })
-          .catch((error) => {
-            console.error('Lỗi khi đăng ký giải đấu:', error);
-            const errorMessage = error?.response?.data?.errorMessage || 'Đã xảy ra lỗi khi đăng ký.';
-            toast.error(errorMessage);
-          });
+        try {
+          let response;
+          if (isEditMode) {
+            // Use PUT for editing
+            response = await updateTournamentRegistration(requestData);
+          } else {
+            // Use POST for creating new registration
+            response = await axioInstance.post('/tour-register-temp', requestData, {
+              withCredentials: true,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+          }
 
-        setShowPopup(false);
-        setSelectedBirds([]);
+          console.log(`${isEditMode ? 'Cập nhật' : 'Đăng ký'} giải đấu thành công:`, response.data || response);
+          toast.success(`${isEditMode ? 'Cập nhật' : 'Đăng ký'} giải đấu thành công!`);
+          setTimeout(() => {
+            fetchTournaments();
+          }, 1000);
+          setShowPopup(false);
+          setSelectedBirds([]);
+        } catch (error) {
+          console.error(`Lỗi khi ${isEditMode ? 'cập nhật' : 'đăng ký'} giải đấu:`, error);
+          const errorMessage = error?.response?.data?.errorMessage || `Đã xảy ra lỗi khi ${isEditMode ? 'cập nhật' : 'đăng ký'}.`;
+          toast.error(errorMessage);
+        }
       }
     });
   };
@@ -212,6 +226,19 @@ const TournamentList = () => {
                           navigate('/login');
                         }
                       }}>Đăng Ký</CButton>
+                  )}
+                  {(
+                    currentUser !== null && tournament.tourApplyStatusCode === "W" &&
+                    <CButton className='me-2 tournament-table-button'
+                      hidden={tournament.isActivedForRegister === false}
+                      color="primary" onClick={() => {
+                        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                        if (isLoggedIn) {
+                          handleOpenPopup(tournament.tourId);
+                        } else {
+                          navigate('/login');
+                        }
+                      }}>Chỉnh Sửa SL Chiến Binh</CButton>
                   )}
                   {/* {tournament.tourApplyStatusCode === 'W' && currentUser !== null && (
                     <CButton
@@ -299,7 +326,7 @@ const TournamentList = () => {
 
       <CModal visible={showPopup} onClose={() => setShowPopup(false)}>
         <CModalHeader closeButton>
-          <CModalTitle>Đăng ký chiến binh</CModalTitle>
+          <CModalTitle>{isEditMode ? 'Chỉnh sửa số lượng chiến binh' : 'Đăng ký chiến binh'}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <label htmlFor="">Số lượng chiến Binh</label>
@@ -319,7 +346,7 @@ const TournamentList = () => {
             Hủy
           </CButton>
           <CButton color="primary" onClick={handleRegister} disabled={birdNumber <= 0}>
-            Đăng ký
+            {isEditMode ? 'Cập nhật' : 'Đăng ký'}
           </CButton>
         </CModalFooter>
       </CModal>
