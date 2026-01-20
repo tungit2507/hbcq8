@@ -75,7 +75,22 @@ const ReachDestination = () => {
         fetchData();
     }, [tourId]);
 
-    const openReportModal = (tourStage) => {
+    const fetchBirdListSubmitted = async (tourStage) => {
+        try {
+            const response = await axiosInstance.get('/tour/bird-list-submitted', {
+                params: {
+                    tourId: tourId,
+                    stageId: tourStage.stageId
+                }
+            });
+            setBirdCodes(response?.data);
+        } catch (error) {
+            console.error('Error calling bird-list-submitted API:', error);
+        }
+    };
+
+    const openReportModal = async (tourStage) => {
+        await fetchBirdListSubmitted(tourStage);
         setTourStageReport(tourStage);
         setShowReportModal(true);
     };
@@ -123,6 +138,7 @@ const ReachDestination = () => {
                         <div className="d-flex flex-wrap gap-2">
                             {birds.map((birdCode, index) => {
                                 const checked = report.birdCode.includes(birdCode);
+                                const isSubmitted = birdCodes.includes(birdCode);
                                 return (
                                     <div
                                         key={index}
@@ -130,7 +146,8 @@ const ReachDestination = () => {
                                             borderRadius: 4,
                                             padding: '4px 8px',
                                             display: 'flex',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            backgroundColor: isSubmitted ? '#e9ecef' : 'transparent'
                                         }}
                                     >
                                         <input
@@ -139,10 +156,11 @@ const ReachDestination = () => {
                                             checked={checked}
                                             onChange={() => {
                                                 setReport(prev => {
-                                                    const birdCodeArr = prev.birdCode.includes(birdCode)
-                                                        ? prev.birdCode.filter(code => code !== birdCode)
-                                                        : [...prev.birdCode, birdCode];
-                                                    return { ...prev, birdCode: birdCodeArr };
+                                                    if (checked) {
+                                                        return { ...prev, birdCode: [] };
+                                                    } else {
+                                                        return { ...prev, birdCode: [birdCode] };
+                                                    }
                                                 });
                                             }}
                                         />
