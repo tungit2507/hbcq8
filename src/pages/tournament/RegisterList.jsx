@@ -89,7 +89,6 @@ const RegisterList = () => {
             <CTableHeaderCell scope="col">Mã Căn Cứ</CTableHeaderCell>
             <CTableHeaderCell scope="col">Tên Người Đăng Ký</CTableHeaderCell>
             <CTableHeaderCell scope="col">Số Lượng</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Khoảng Cách</CTableHeaderCell> {/* Thêm cột mới */}
             <CTableHeaderCell scope="col">Chiến Binh</CTableHeaderCell>
             <CTableHeaderCell scope="col">Ngày Đăng ký</CTableHeaderCell>
             <CTableHeaderCell scope="col">Trạng Thái</CTableHeaderCell>
@@ -103,10 +102,6 @@ const RegisterList = () => {
                 <CTableHeaderCell scope="row">{tournament.locationCode}</CTableHeaderCell>
                 <CTableDataCell>{tournament.requesterName}</CTableDataCell>
                 <CTableDataCell>{tournament.birdNumsRegistered}</CTableDataCell>
-                <CTableDataCell>
-                  {/* Dữ liệu giả khoảng cách */}
-                  123.456 km
-                </CTableDataCell>
                 <CTableDataCell>{tournament.birdCodes.join(', ')}</CTableDataCell>
                 <CTableDataCell>{formatDate(tournament.createdAt)}</CTableDataCell>
                 <CTableDataCell>
